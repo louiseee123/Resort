@@ -1,0 +1,270 @@
+/* ============================================================
+   Balamban Coastal Resort - Global Styles & Animations
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   Hero Entrance Animations
+   ---------------------------------------------------------- */
+@keyframes heroFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes chevronPulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* ----------------------------------------------------------
+   Alert Slide Animation
+   ---------------------------------------------------------- */
+.alert-slide {
+  animation: alertSlideIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes alertSlideIn {
+  from {
+    transform: translateX(-50%) translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ----------------------------------------------------------
+   Scroll Reveal Base Styles
+   ---------------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ----------------------------------------------------------
+   Hero Content Entrance Stagger
+   ---------------------------------------------------------- */
+.hero-label {
+  opacity: 0;
+  animation: heroContentRise 0.9s 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.hero-title {
+  opacity: 0;
+  animation: heroContentRise 0.9s 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.hero-subtitle {
+  opacity: 0;
+  animation: heroContentRise 0.9s 0.75s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.hero-btn {
+  opacity: 0;
+  animation: heroContentRise 0.9s 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes heroContentRise {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ----------------------------------------------------------
+   Input Focus States
+   ---------------------------------------------------------- */
+input:focus,
+textarea:focus {
+  border-color: #006D77 !important;
+  box-shadow: 0 0 0 3px rgba(0, 109, 119, 0.15);
+}
+
+/* ----------------------------------------------------------
+   Navigation Link Underline Animation
+   ---------------------------------------------------------- */
+.desktop-nav a {
+  position: relative;
+}
+
+.desktop-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #FF8360;
+  transition: width 0.3s ease;
+}
+
+.desktop-nav a:hover::after {
+  width: 100%;
+}
+
+/* ----------------------------------------------------------
+   Mobile Menu Visibility
+   ---------------------------------------------------------- */
+.mobile-hamburger {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .mobile-hamburger {
+    display: block;
+  }
+
+  .desktop-nav {
+    display: none !important;
+  }
+
+  .mobile-menu {
+    display: block;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-menu {
+    display: none !important;
+  }
+}
+
+/* ----------------------------------------------------------
+   Room Grid Responsive
+   ---------------------------------------------------------- */
+@media (max-width: 767px) {
+  .room-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .room-card {
+    max-width: 100%;
+  }
+}
+
+/* ----------------------------------------------------------
+   Location Grid Responsive
+   ---------------------------------------------------------- */
+@media (max-width: 767px) {
+  .location-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ----------------------------------------------------------
+   Form Row Responsive
+   ---------------------------------------------------------- */
+@media (max-width: 767px) {
+  .form-row {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ----------------------------------------------------------
+   Amenities Grid Responsive
+   ---------------------------------------------------------- */
+@media (max-width: 480px) {
+  .amenities-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+/* ----------------------------------------------------------
+   Footer Grid Responsive
+   ---------------------------------------------------------- */
+@media (max-width: 767px) {
+  footer .reveal {
+    grid-template-columns: 1fr !important;
+    text-align: center;
+    gap: 2rem !important;
+  }
+
+  footer .reveal div:last-child {
+    justify-content: center;
+  }
+
+  footer > div:last-child {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem !important;
+  }
+}
+
+/* ----------------------------------------------------------
+   Font Size Adjustments for Mobile
+   ---------------------------------------------------------- */
+@media (max-width: 767px) {
+  html {
+    font-size: 15px;
+  }
+
+  section {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 10vw, 4rem) !important;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem !important;
+  }
+}
+
+/* ----------------------------------------------------------
+   Modal Scrollbar Styling
+   ---------------------------------------------------------- */
+@media (max-width: 767px) {
+  .mobile-menu a {
+    font-size: 1.1rem !important;
+    padding: 0.5rem 0;
+  }
+}
+
+/* ----------------------------------------------------------
+   Smooth scrolling for the entire document
+   ---------------------------------------------------------- */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+/* ----------------------------------------------------------
+   Selection color
+   ---------------------------------------------------------- */
+::selection {
+  background: rgba(0, 109, 119, 0.2);
+  color: #006D77;
+}
+
+/* ----------------------------------------------------------
+   Scrollbar styling
+   ---------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FFFDF7;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #006D77;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #005a63;
+}
