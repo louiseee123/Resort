@@ -140,18 +140,7 @@ textarea:focus {
   }
 }
 
-/* ----------------------------------------------------------
-   Room Grid Responsive
-   ---------------------------------------------------------- */
-@media (max-width: 767px) {
-  .room-grid {
-    grid-template-columns: 1fr !important;
-  }
 
-  .room-card {
-    max-width: 100%;
-  }
-}
 
 /* ----------------------------------------------------------
    Location Grid Responsive

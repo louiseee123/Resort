@@ -1,0 +1,497 @@
+/* Rates Section - Luxury Resort Styling */
+.rates-section {
+  background: #FDFCDC;
+  padding: clamp(4rem, 8vw, 8rem) clamp(1rem, 4vw, 3rem);
+  position: relative;
+  overflow: hidden;
+}
+
+.rates-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #006D77, #FF8360, #006D77, transparent);
+}
+
+.rates-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Section Headers */
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.section-tag {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #FF8360;
+  margin-bottom: 0.75rem;
+  display: inline-block;
+}
+
+.section-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 400;
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: #006D77;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.75rem;
+}
+
+.section-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  color: #5E5B52;
+  max-width: 760px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* Rate Cards List */
+.rates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-bottom: 4rem;
+}
+
+.rate-card {
+  background: #FFFDF7;
+  border-radius: 24px;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.rate-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 109, 119, 0.12);
+  border-color: #FF8360;
+}
+
+.rate-card.has-badge {
+  border-left: 4px solid #FF8360;
+}
+
+.rate-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: #2A9D8F;
+  color: #FFFDF7;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.7rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 50px;
+  letter-spacing: 0.05em;
+  z-index: 2;
+}
+
+.rate-card-content {
+  padding: 1.5rem;
+}
+
+.rate-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.rate-name {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 1.45rem;
+  color: #006D77;
+  margin: 0;
+  line-height: 1.15;
+}
+
+.rate-description {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  color: #5E5B52;
+  line-height: 1.65;
+  margin: 0 0 1rem 0;
+}
+
+.rate-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  border-top: 1px solid rgba(0, 109, 119, 0.15);
+  padding-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.rate-price-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.rate-label {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.7rem;
+  color: #006D77;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.rate-price {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: 1.7rem;
+  color: #FF8360;
+}
+
+.rate-guests {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #5E5B52;
+  text-align: right;
+}
+
+/* Hotel Rooms Section */
+.hotel-rooms-section {
+  margin-top: 4rem;
+}
+
+.room-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.room-card-wrapper {
+  height: 100%;
+}
+
+.room-card {
+  background: #FDFCDC;
+  border-radius: 28px;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.room-card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 30px 50px rgba(0, 109, 119, 0.15);
+}
+
+.room-card:hover .room-image img {
+  transform: scale(1.05);
+}
+
+.room-card:hover .image-overlay {
+  opacity: 0.5;
+}
+
+.room-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: #2A9D8F;
+  color: #FFFDF7;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.7rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 40px;
+  z-index: 3;
+  letter-spacing: 0.05em;
+  backdrop-filter: blur(4px);
+  background: rgba(42, 157, 143, 0.95);
+}
+
+.room-image {
+  position: relative;
+  height: 260px;
+  overflow: hidden;
+  background: #e0d5c0;
+}
+
+.room-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  display: block;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.3) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.room-content {
+  padding: 1.75rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #FDFCDC;
+}
+
+.room-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.35rem;
+  color: #006D77;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+.room-description {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 0.9rem;
+  color: #5E5B52;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  flex: 1;
+}
+
+.room-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 109, 119, 0.1);
+}
+
+.room-price {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.price-amount {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #FF8360;
+}
+
+.price-period {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: #5E5B52;
+}
+
+.room-guests {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: #5E5B52;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.room-guests::before {
+  content: '👥';
+  font-size: 0.9rem;
+}
+
+.book-button {
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 60px;
+  background: #FF8360;
+  color: #FFFDF7;
+  border: none;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.book-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.book-button:hover {
+  background: #e06a4a;
+  transform: scale(1.02);
+  box-shadow: 0 4px 15px rgba(255, 131, 96, 0.3);
+}
+
+.book-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.book-button:active {
+  transform: scale(0.98);
+}
+
+.button-icon {
+  transition: transform 0.3s ease;
+}
+
+.book-button:hover .button-icon {
+  transform: translateX(4px);
+}
+
+/* Reveal Animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: revealUp 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+}
+
+@keyframes revealUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .room-grid {
+    gap: 1.5rem;
+  }
+  
+  .room-title {
+    font-size: 1.25rem;
+  }
+  
+  .price-amount {
+    font-size: 1.35rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .rates-section {
+    padding: 4rem 1.5rem;
+  }
+  
+  .room-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .room-card:hover {
+    transform: translateY(-6px);
+  }
+  
+  .room-image {
+    height: 220px;
+  }
+  
+  .room-content {
+    padding: 1.25rem;
+  }
+  
+  .room-title {
+    font-size: 1.15rem;
+  }
+  
+  .rate-name {
+    font-size: 1.2rem;
+  }
+  
+  .rate-price {
+    font-size: 1.4rem;
+  }
+  
+  .rate-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .rate-guests {
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 1.75rem;
+  }
+  
+  .room-image {
+    height: 200px;
+  }
+  
+  .price-amount {
+    font-size: 1.25rem;
+  }
+  
+  .book-button {
+    padding: 0.75rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* Smooth Scroll Behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Loading Skeleton (optional elegance) */
+.room-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

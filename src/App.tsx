@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import type { ReactNode } from 'react'
 import './App.css'
+
 import AdminReservations from './pages/AdminReservations'
+
+
 
 /* ============================================================
    Balamban Coastal Resort - Single Page Website
@@ -21,110 +23,62 @@ interface RoomData {
   badge?: string
 }
 
-interface AmenityData {
-  id: number
-  name: string
-  description: string
-  icon: ReactNode
-  featured?: boolean
-}
-
 /* ----------------------------------------------------------
    Data
    ---------------------------------------------------------- */
+import Amenities from './pages/Amenities'
+import Rates from './pages/Rates'
+
 const rooms: RoomData[] = [
   {
     id: 1,
-    name: 'Ocean View Cabana',
-    description: 'Wake to the sound of gentle waves in our signature cabana. Features a private deck, king-size bed, and panoramic ocean views.',
-    price: '₱3,500',
-    guests: '2 guests',
+    name: 'Weekday Pool Access',
+    description: 'Adults ₱150 · Children (3ft & below) ₱100. Perfect for a relaxed day by the pool.',
+    price: '₱150',
+    guests: 'Adults',
     image: '/room-ocean.jpg',
+    badge: 'WEEKDAY DEAL',
   },
   {
     id: 2,
-    name: 'Garden Suite',
-    description: 'Nestled among tropical gardens, this spacious suite offers tranquility and comfort with a private terrace and rainfall shower.',
-    price: '₱2,800',
-    guests: '2 guests',
+    name: 'Weekend / Holiday / Night Pool Access',
+    description: 'Adults ₱200 · Children (3ft & below) ₱150. Includes on-site pool use for the day or for night access.',
+    price: '₱200',
+    guests: 'Adults',
     image: '/room-garden.jpg',
+    badge: 'POPULAR',
   },
   {
     id: 3,
-    name: 'Beachfront Room for Two',
-    description: 'Steps from the shore, this intimate room puts you right on the sand. Perfect for couples seeking a private beach escape.',
-    price: '₱2,000',
-    guests: '2 guests',
+    name: 'Table Cottage Rentals (Capacity-Based)',
+    description: '4–6 people: ₱300 · 10–20 people: ₱500 · 20–30 people: ₱1,000. Choose the cottage size that fits your group.',
+    price: '₱300+',
+    guests: 'Capacity-based',
     image: '/room-beachfront.jpg',
-    badge: 'BEST VALUE',
-  },
-]
-
-const amenities: AmenityData[] = [
-  {
-    id: 1,
-    name: 'Free WiFi',
-    description: 'Stay connected throughout the resort.',
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12">
-        <path d="M24 36c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm-9.9-7c.8.8.8 2 0 2.8-.8.8-2 .8-2.8 0C7.1 27.8 4 23.2 4 18c0-1.1.9-2 2-2s2 .9 2 2c0 3.9 2.4 7.6 6.1 10zm19.8 0c3.7-2.4 6.1-6.1 6.1-10 0-1.1.9-2 2-2s2 .9 2 2c0 5.2-3.1 9.8-7.3 12.6-.8.6-1.9.5-2.6-.3-.7-.8-.6-2 .2-2.7-.3.1-.4.3-.4.4zM14.5 22c.8.8.8 2 0 2.8-.8.8-2 .8-2.8 0C9 22.3 8 20.2 8 18c0-1.1.9-2 2-2s2 .9 2 2c0 1.4.5 2.7 1.5 3.7v.3zm19 0c1-.9 1.5-2.3 1.5-3.7 0-1.1.9-2 2-2s2 .9 2 2c0 2.2-1 4.3-2.7 5.8-.8.6-1.9.5-2.6-.3-.7-.8-.6-2 .2-2.7-.1.1-.2.2-.4.2-.1.7-.4.7-.4.7zM24 28c-1.1 0-2-.9-2-2 0-1.1.9-2 2-2s2 .9 2 2-.9 2-2 2z" fill="currentColor"/>
-      </svg>
-    ),
-  },
-  {
-    id: 2,
-    name: 'Infinity Pool',
-    description: 'Swim with endless ocean views.',
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12">
-        <path d="M8 28c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm0-6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm32 6c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm0-6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zM24 32c2.2 0 4-1.8 4-4s-1.8-4-4-4-4 1.8-4 4 1.8 4 4 4zm0-6c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2z" fill="currentColor"/>
-        <path d="M4 36c4 0 4-2 8-2s4 2 8 2 4-2 8-2 4 2 8 2 4-2 8-2v4c-4 0-4 2-8 2s-4-2-8-2-4 2-8 2-4-2-8-2v-4z" fill="currentColor"/>
-      </svg>
-    ),
-    featured: true,
-  },
-  {
-    id: 3,
-    name: 'Beach Front',
-    description: 'Direct access to pristine white sand.',
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12">
-        <circle cx="32" cy="14" r="6" fill="currentColor"/>
-        <path d="M4 38h40c0-6.6-5.4-12-12-12-3.8 0-7.2 1.8-9.4 4.6C21.4 26.6 19.6 26 18 26c-4.4 0-8 3.6-8 8v4z" fill="currentColor"/>
-      </svg>
-    ),
+    badge: 'GROUP FAVORITE',
   },
   {
     id: 4,
-    name: 'Restaurant',
-    description: 'Fresh local cuisine with ocean views.',
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12">
-        <path d="M12 8v18c0 2.2 1.8 4 4 4s4-1.8 4-4V8h-2v18c0 1.1-.9 2-2 2s-2-.9-2-2V8h-2z" fill="currentColor"/>
-        <path d="M20 8v12c0 3.3 2.7 6 6 6v14h2V26c3.3 0 6-2.7 6-6V8h-2v12c0 2.2-1.8 4-4 4s-4-1.8-4-4V8h-4z" fill="currentColor"/>
-      </svg>
-    ),
-  },
-  {
-    id: 5,
-    name: 'Spa & Wellness',
-    description: 'Rejuvenate with tropical treatments.',
-    icon: (
-      <svg viewBox="0 0 48 48" fill="none" className="w-12 h-12">
-        <path d="M24 4c-2 4-8 12-8 18 0 5 3 10 8 10s8-5 8-10c0-6-6-14-8-18z" fill="currentColor"/>
-        <path d="M12 28c-2 0-4 2-4 4s2 4 4 4c1.5 0 2.8-.8 3.4-2-.3-1.2-.4-2.4-.4-3.5 0-.5 0-1 .1-1.5-.7-.6-1.6-1-2.1-1zm24 0c-.5 0-1.4.4-2.1 1 .1.5.1 1 .1 1.5 0 1.1-.1 2.3-.4 3.5.6 1.2 1.9 2 3.4 2 2 0 4-2 4-4s-2-4-4-4z" fill="currentColor"/>
-      </svg>
-    ),
+    name: 'Day Use Room (10AM–5PM)',
+    description: '₱2,500 for up to 10 people. Covers full day use from 10:00 AM to 5:00 PM (subject to availability).',
+    price: '₱2,500',
+    guests: 'Up to 10 people',
+    image: '/room-ocean.jpg',
+    badge: 'DAY PASS',
   },
 ]
 
+/* Amenities were moved to src/pages/Amenities.tsx */
+
 const navLinks = [
   { label: 'Home', href: '#home' },
-  { label: 'Rooms', href: '#rooms' },
+  { label: 'Rates', href: '#rates' },
   { label: 'Amenities', href: '#amenities' },
   { label: 'Location', href: '#location' },
+  { label: 'Packages', href: '#packages' },
   { label: 'Contact', href: '#contact' },
 ]
+
 
 /* ----------------------------------------------------------
    Custom hook for scroll-triggered animations
@@ -637,7 +591,7 @@ export default function App() {
         >
           {/* Logo */}
           <a
-            href="#home"
+             href="#home"
             onClick={(e) => { e.preventDefault(); scrollToSection('#home') }}
             style={{
               fontFamily: 'Poppins, sans-serif',
@@ -648,7 +602,7 @@ export default function App() {
               letterSpacing: '-0.01em',
             }}
           >
-            Balamban Coastal Resort
+            Villa Susane Resort
           </a>
 
           {/* Desktop Nav */}
@@ -805,7 +759,7 @@ export default function App() {
               maxWidth: '700px',
             }}
           >
-            Balamban Coastal Resort
+            Villa Susane Resort
           </h1>
           <p
             className="hero-subtitle"
@@ -823,8 +777,9 @@ export default function App() {
             Your private escape in Abucayan, Balamban, Cebu
           </p>
           <a
-            href="#rooms"
-            onClick={(e) => { e.preventDefault(); scrollToSection('#rooms') }}
+            href="#rates"
+            onClick={(e) => { e.preventDefault(); scrollToSection('#rates') }}
+
             className="hero-btn"
             style={coralBtn}
             onMouseEnter={(e) => {
@@ -916,297 +871,13 @@ export default function App() {
         </div>
       </section>
 
-      {/* ====== ROOMS SECTION ====== */}
-      <section
-        id="rooms"
-        style={{
-          background: '#FDFCDC',
-          padding: 'clamp(4rem, 8vw, 8rem) clamp(1rem, 4vw, 3rem)',
-        }}
-      >
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          {/* Section Header */}
-          <div className="reveal" style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <p style={sectionLabel}>STAY WITH US</p>
-            <h2 style={sectionHeading}>Our Cabanas and Suites</h2>
-            <p style={sectionSubtitle}>Choose your perfect coastal retreat</p>
-          </div>
-
-          {/* Room Cards Grid */}
-          <div
-            className="room-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-              gap: '2rem',
-            }}
-          >
-            {rooms.map((room, index) => (
-              <div
-                key={room.id}
-                className="reveal"
-                style={{
-                  animationDelay: `${index * 0.12}s`,
-                }}
-              >
-                <div
-                  className="room-card"
-                  style={{
-                    background: '#FDFCDC',
-                    border: '2px solid #006D77',
-                    borderRadius: '16px',
-                    overflow: 'hidden',
-                    transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    position: 'relative',
-                  }}
-                  onMouseEnter={(e) => {
-                    const card = e.currentTarget
-                    card.style.transform = 'translateY(-8px)'
-                    card.style.borderColor = '#FF8360'
-                    card.style.boxShadow = '0 20px 40px rgba(255,131,96,0.15)'
-                  }}
-                  onMouseLeave={(e) => {
-                    const card = e.currentTarget
-                    card.style.transform = 'translateY(0)'
-                    card.style.borderColor = '#006D77'
-                    card.style.boxShadow = 'none'
-                  }}
-                >
-                  {/* Badge */}
-                  {room.badge && (
-                    <span
-                      style={{
-                        position: 'absolute',
-                        top: '1rem',
-                        left: '1rem',
-                        background: '#2A9D8F',
-                        color: '#FFFDF7',
-                        fontFamily: 'Inter, sans-serif',
-                        fontWeight: 500,
-                        fontSize: '0.7rem',
-                        padding: '0.35rem 0.85rem',
-                        borderRadius: '50px',
-                        zIndex: 2,
-                        letterSpacing: '0.05em',
-                      }}
-                    >
-                      {room.badge}
-                    </span>
-                  )}
-
-                  {/* Room Image */}
-                  <div style={{ height: '220px', overflow: 'hidden' }}>
-                    <img
-                      src={room.image}
-                      alt={room.name}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        display: 'block',
-                        transition: 'transform 0.5s ease',
-                      }}
-                      onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.05)' }}
-                      onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)' }}
-                    />
-                  </div>
-
-                  {/* Room Content */}
-                  <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                    <h3
-                      style={{
-                        fontFamily: 'Poppins, sans-serif',
-                        fontWeight: 500,
-                        fontSize: '1.25rem',
-                        color: '#006D77',
-                        marginBottom: '0.5rem',
-                      }}
-                    >
-                      {room.name}
-                    </h3>
-                    <p
-                      style={{
-                        fontFamily: 'Inter, sans-serif',
-                        fontWeight: 400,
-                        fontSize: '0.95rem',
-                        color: '#5E5B52',
-                        lineHeight: 1.5,
-                        marginBottom: '1rem',
-                        flex: 1,
-                      }}
-                    >
-                      {room.description}
-                    </p>
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginBottom: '1rem',
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontFamily: 'Poppins, sans-serif',
-                          fontWeight: 600,
-                          fontSize: '1.25rem',
-                          color: '#FF8360',
-                        }}
-                      >
-                        {room.price}
-                        <span
-                          style={{
-                            fontWeight: 400,
-                            fontSize: '0.85rem',
-                            color: '#5E5B52',
-                          }}
-                        >
-                          {' '}
-                          / night
-                        </span>
-                      </span>
-                      <span
-                        style={{
-                          fontFamily: 'Inter, sans-serif',
-                          fontSize: '0.85rem',
-                          color: '#5E5B52',
-                        }}
-                      >
-                        {room.guests}
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => openBookingModal(room)}
-                      style={{
-                        width: '100%',
-                        padding: '0.875rem',
-                        borderRadius: '50px',
-                        background: '#FF8360',
-                        color: '#FFFDF7',
-                        border: 'none',
-                        fontFamily: 'Inter, sans-serif',
-                        fontWeight: 500,
-                        fontSize: '0.95rem',
-                        cursor: 'pointer',
-                        transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                      }}
-                      onMouseEnter={(e) => {
-                        const t = e.currentTarget
-                        t.style.background = '#FF9A7A'
-                        t.style.transform = 'translateY(-2px)'
-                        t.style.boxShadow = '0 8px 24px rgba(255,131,96,0.35)'
-                      }}
-                      onMouseLeave={(e) => {
-                        const t = e.currentTarget
-                        t.style.background = '#FF8360'
-                        t.style.transform = 'translateY(0)'
-                        t.style.boxShadow = 'none'
-                      }}
-                    >
-                      Book Now
-                    </button>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ====== RATES SECTION ====== */}
+      <Rates rooms={rooms} onBook={openBookingModal} />
 
       {/* ====== AMENITIES SECTION ====== */}
-      <section
-        id="amenities"
-        style={{
-          background: '#FDFCDC',
-          padding: 'clamp(4rem, 8vw, 8rem) clamp(1rem, 4vw, 3rem)',
-        }}
-      >
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          {/* Section Header */}
-          <div className="reveal" style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <p style={sectionLabel}>EXPERIENCE</p>
-            <h2 style={sectionHeading}>Resort Amenities</h2>
-            <p style={sectionSubtitle}>Everything you need for the perfect coastal getaway</p>
-          </div>
+      <Amenities />
 
-          {/* Amenities Grid */}
-          <div
-            className="amenities-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-              gap: '1.5rem',
-            }}
-          >
-            {amenities.map((amenity, index) => (
-              <div
-                key={amenity.id}
-                className="reveal"
-                style={{
-                  animationDelay: `${index * 0.1}s`,
-                }}
-              >
-                <div
-                  style={{
-                    background: '#FFFDF7',
-                    borderRadius: '12px',
-                    padding: '2rem 1.5rem',
-                    textAlign: 'center',
-                    transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                    cursor: 'default',
-                  }}
-                  onMouseEnter={(e) => {
-                    const el = e.currentTarget
-                    el.style.transform = 'translateY(-4px)'
-                    el.style.boxShadow = '0 12px 24px rgba(0,109,119,0.1)'
-                  }}
-                  onMouseLeave={(e) => {
-                    const el = e.currentTarget
-                    el.style.transform = 'translateY(0)'
-                    el.style.boxShadow = 'none'
-                  }}
-                >
-                  <div
-                    style={{
-                      color: amenity.featured ? '#FF8360' : '#006D77',
-                      marginBottom: '1rem',
-                      display: 'flex',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    {amenity.icon}
-                  </div>
-                  <h4
-                    style={{
-                      fontFamily: 'Inter, sans-serif',
-                      fontWeight: 500,
-                      fontSize: '1rem',
-                      color: '#006D77',
-                      marginBottom: '0.5rem',
-                    }}
-                  >
-                    {amenity.name}
-                  </h4>
-                  <p
-                    style={{
-                      fontFamily: 'Inter, sans-serif',
-                      fontWeight: 400,
-                      fontSize: '0.85rem',
-                      color: '#5E5B52',
-                      lineHeight: 1.5,
-                    }}
-                  >
-                    {amenity.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+
 
       {/* ====== LOCATION SECTION ====== */}
       <section
@@ -1336,6 +1007,175 @@ export default function App() {
         </div>
       </section>
 
+      {/* ====== PACKAGES SECTION ====== */}
+      <section
+        id="packages"
+        style={{
+          background: '#FDFCDC',
+          padding: 'clamp(4rem, 8vw, 8rem) clamp(1rem, 4vw, 3rem)',
+        }}
+      >
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div className="reveal" style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <p style={sectionLabel}>OFFERS</p>
+            <h2 style={sectionHeading}>Curated Stay Packages</h2>
+            <p style={sectionSubtitle}>Choose a package and let us handle the details</p>
+          </div>
+
+          <div
+            className="packages-grid"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '2rem',
+            }}
+          >
+            {[
+              {
+                title: 'Romance Retreat',
+                description: 'Couples’ escape with breakfast for two, sunset welcome drinks, and late check-out (subject to availability).',
+                price: 'From \u20b1 12,900',
+                badge: 'POPULAR',
+              },
+              {
+                title: 'Family Fun Getaway',
+                description: 'Room for the whole crew with complimentary kids’ activities, family breakfast, and beach picnic setup.',
+                price: 'From \u20b1 15,800',
+                badge: 'FAMILY',
+              },
+              {
+                title: 'Wellness & Spa Days',
+                description: 'Recharge with spa access, rejuvenating treatments, and a calming wellness session each day.',
+                price: 'From \u20b1 18,500',
+                badge: 'SERENITY',
+              },
+            ].map((pkg, index) => (
+              <div
+                key={pkg.title}
+                className="reveal"
+                style={{
+                  animationDelay: `${index * 0.1}s`,
+                }}
+              >
+                <div
+                  style={{
+                    background: '#FFFDF7',
+                    border: '2px solid #006D77',
+                    borderRadius: '16px',
+                    padding: '1.75rem 1.5rem',
+                    transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    position: 'relative',
+                  }}
+                  onMouseEnter={(e) => {
+                    const el = e.currentTarget
+                    el.style.transform = 'translateY(-6px)'
+                    el.style.borderColor = '#FF8360'
+                    el.style.boxShadow = '0 18px 40px rgba(255,131,96,0.15)'
+                  }}
+                  onMouseLeave={(e) => {
+                    const el = e.currentTarget
+                    el.style.transform = 'translateY(0)'
+                    el.style.borderColor = '#006D77'
+                    el.style.boxShadow = 'none'
+                  }}
+                >
+                  {pkg.badge && (
+                    <span
+                      style={{
+                        position: 'absolute',
+                        top: '1rem',
+                        right: '1rem',
+                        background: '#2A9D8F',
+                        color: '#FFFDF7',
+                        fontFamily: 'Inter, sans-serif',
+                        fontWeight: 600,
+                        fontSize: '0.7rem',
+                        padding: '0.35rem 0.8rem',
+                        borderRadius: '50px',
+                        letterSpacing: '0.05em',
+                      }}
+                    >
+                      {pkg.badge}
+                    </span>
+                  )}
+
+                  <h3
+                    style={{
+                      fontFamily: 'Poppins, sans-serif',
+                      fontWeight: 600,
+                      fontSize: '1.35rem',
+                      color: '#006D77',
+                      marginBottom: '0.5rem',
+                      paddingRight: pkg.badge ? '6rem' : 0,
+                    }}
+                  >
+                    {pkg.title}
+                  </h3>
+
+                  <p
+                    style={{
+                      fontFamily: 'Inter, sans-serif',
+                      fontWeight: 400,
+                      fontSize: '0.95rem',
+                      color: '#5E5B52',
+                      lineHeight: 1.6,
+                      marginBottom: '1.25rem',
+                      flex: 1,
+                    }}
+                  >
+                    {pkg.description}
+                  </p>
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
+                    <span
+                      style={{
+                        fontFamily: 'Poppins, sans-serif',
+                        fontWeight: 700,
+                        fontSize: '1.35rem',
+                        color: '#FF8360',
+                      }}
+                    >
+                      {pkg.price}
+                    </span>
+                    <a
+                      href="#contact"
+                      onClick={(e) => {
+                        e.preventDefault()
+                        scrollToSection('#contact')
+                      }}
+                      style={{
+                        ...coralBtn,
+                        padding: '0.8rem 1.6rem',
+                        fontSize: '0.9rem',
+                        flexShrink: 0,
+                        textAlign: 'center',
+                      }}
+                      onMouseEnter={(e) => {
+                        const t = e.currentTarget
+                        t.style.background = '#FF9A7A'
+                        t.style.transform = 'translateY(-2px)'
+                        t.style.boxShadow = '0 8px 24px rgba(255,131,96,0.35)'
+                      }}
+                      onMouseLeave={(e) => {
+                        const t = e.currentTarget
+                        t.style.background = '#FF8360'
+                        t.style.transform = 'translateY(0)'
+                        t.style.boxShadow = 'none'
+                      }}
+                    >
+                      Ask About This
+                    </a>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ====== CONTACT / BOOKING INQUIRY ====== */}
       <section
         id="contact"
@@ -1345,6 +1185,7 @@ export default function App() {
         }}
       >
         <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+
           {/* Section Header */}
           <div className="reveal" style={{ textAlign: 'center', marginBottom: '3rem' }}>
             <p style={sectionLabel}>CONNECT</p>
@@ -1470,7 +1311,7 @@ export default function App() {
                 marginBottom: '0.5rem',
               }}
             >
-              Balamban Coastal Resort
+              Villa Susane Resort
             </h3>
             <p
               style={{
