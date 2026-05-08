@@ -42,4 +42,7 @@ function Toggle({
   )
 }
 
-export { Toggle, toggleVariants }
+export { Toggle }
+export { toggleVariants }
+
+

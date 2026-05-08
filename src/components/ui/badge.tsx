@@ -25,7 +25,12 @@ const badgeVariants = cva(
   }
 )
 
-function Badge({
+export { badgeVariants }
+
+export function Badge({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // (kept for compatibility with other ui components)
+
   className,
   variant,
   asChild = false,
@@ -43,4 +48,6 @@ function Badge({
   )
 }
 
-export { Badge, badgeVariants }
+
+
+
