@@ -10,7 +10,13 @@ export type RateRoom = {
 
 import './Rates.css'
 
-export default function Rates({ rooms }: { rooms: RateRoom[]; onBook: (room: RateRoom) => void }) {
+export default function Rates({
+  rooms,
+  onBook,
+}: {
+  rooms: RateRoom[]
+  onBook: (room: RateRoom) => void
+}) {
 
   const hotelRooms = [
     {
