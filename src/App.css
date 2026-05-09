@@ -1,25 +1,166 @@
 /* ============================================================
    Balamban Coastal Resort - Global Styles & Animations
+   Palette: #FDFCDC (cream) · #006D77 (teal) · #FF8360 (coral) · #2A9D8F (jade)
+   Typography: Poppins (headings) · Inter (body)
    ============================================================ */
 
-/* ----------------------------------------------------------
-   Hero Entrance Animations
-   ---------------------------------------------------------- */
-@keyframes heroFadeIn {
+/* ── Font Imports ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* ── CSS Variables ── */
+:root {
+  --cream:  #FDFCDC;
+  --teal:   #006D77;
+  --coral:  #FF8360;
+  --jade:   #2A9D8F;
+  --ink:    #1A2B2C;
+  --muted:  #6B7B7C;
+  --border: rgba(0, 109, 119, 0.12);
+  --white:  #FFFDF7;
+  
+  --font-heading: 'Poppins', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* ── Reset & Base ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--cream);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Typography Defaults ── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--ink);
+}
+
+p, span, a, li, label, input, textarea, button {
+  font-family: var(--font-body);
+}
+
+/* ── Selection ── */
+::selection {
+  background: rgba(0, 109, 119, 0.15);
+  color: var(--teal);
+}
+
+/* ── Invisible Scrollbar ── */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+body {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* ── Focus States ── */
+input:focus,
+textarea:focus,
+select:focus,
+button:focus-visible {
+  outline: none;
+  border-color: var(--teal) !important;
+  box-shadow: 0 0 0 3px rgba(0, 109, 119, 0.12);
+}
+
+/* ── Links ── */
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s ease;
+}
+
+/* ── Images ── */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ══════════════════════════════════════════════════════════
+   ANIMATIONS
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Scroll Reveal ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Keyframes ── */
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-@keyframes chevronPulse {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+@keyframes heroContentRise {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* ----------------------------------------------------------
-   Alert Slide Animation
-   ---------------------------------------------------------- */
-.alert-slide {
-  animation: alertSlideIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+@keyframes chevronPulse {
+  0%, 100% { opacity: 0.4; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(6px); }
 }
 
 @keyframes alertSlideIn {
@@ -33,24 +174,12 @@
   }
 }
 
-/* ----------------------------------------------------------
-   Scroll Reveal Base Styles
-   ---------------------------------------------------------- */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+/* ── Animation Classes ── */
+.alert-slide {
+  animation: alertSlideIn 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
-.reveal.revealed {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ----------------------------------------------------------
-   Hero Content Entrance Stagger
-   ---------------------------------------------------------- */
+/* ── Hero Staggered Entrance ── */
 .hero-label {
   opacity: 0;
   animation: heroContentRise 0.9s 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
@@ -71,31 +200,17 @@
   animation: heroContentRise 0.9s 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
-@keyframes heroContentRise {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
+/* ══════════════════════════════════════════════════════════
+   NAVIGATION
+   ══════════════════════════════════════════════════════════ */
 
-/* ----------------------------------------------------------
-   Input Focus States
-   ---------------------------------------------------------- */
-input:focus,
-textarea:focus {
-  border-color: #006D77 !important;
-  box-shadow: 0 0 0 3px rgba(0, 109, 119, 0.15);
-}
-
-/* ----------------------------------------------------------
-   Navigation Link Underline Animation
-   ---------------------------------------------------------- */
+/* ── Desktop Nav Underline ── */
 .desktop-nav a {
   position: relative;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
 }
 
 .desktop-nav a::after {
@@ -105,7 +220,7 @@ textarea:focus {
   left: 0;
   width: 0;
   height: 2px;
-  background: #FF8360;
+  background: var(--coral);
   transition: width 0.3s ease;
 }
 
@@ -113,9 +228,7 @@ textarea:focus {
   width: 100%;
 }
 
-/* ----------------------------------------------------------
-   Mobile Menu Visibility
-   ---------------------------------------------------------- */
+/* ── Mobile Nav Visibility ── */
 .mobile-hamburger {
   display: none;
 }
@@ -140,39 +253,40 @@ textarea:focus {
   }
 }
 
+/* ══════════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+   ══════════════════════════════════════════════════════════ */
 
-
-/* ----------------------------------------------------------
-   Location Grid Responsive
-   ---------------------------------------------------------- */
 @media (max-width: 767px) {
+  html {
+    font-size: 15px;
+  }
+
+  section {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Hero text scaling */
+  .hero-title {
+    font-size: clamp(2.5rem, 10vw, 4rem) !important;
+  }
+
+  .hero-subtitle {
+    font-size: 1.1rem !important;
+  }
+
+  /* Location grid */
   .location-grid {
     grid-template-columns: 1fr !important;
   }
-}
 
-/* ----------------------------------------------------------
-   Form Row Responsive
-   ---------------------------------------------------------- */
-@media (max-width: 767px) {
+  /* Form rows */
   .form-row {
     grid-template-columns: 1fr !important;
   }
-}
 
-/* ----------------------------------------------------------
-   Amenities Grid Responsive
-   ---------------------------------------------------------- */
-@media (max-width: 480px) {
-  .amenities-grid {
-    grid-template-columns: 1fr 1fr !important;
-  }
-}
-
-/* ----------------------------------------------------------
-   Footer Grid Responsive
-   ---------------------------------------------------------- */
-@media (max-width: 767px) {
+  /* Footer */
   footer .reveal {
     grid-template-columns: 1fr !important;
     text-align: center;
@@ -188,72 +302,18 @@ textarea:focus {
     text-align: center;
     gap: 0.5rem !important;
   }
-}
 
-/* ----------------------------------------------------------
-   Font Size Adjustments for Mobile
-   ---------------------------------------------------------- */
-@media (max-width: 767px) {
-  html {
-    font-size: 15px;
-  }
-
-  section {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-  }
-
-  .hero-title {
-    font-size: clamp(2.5rem, 10vw, 4rem) !important;
-  }
-
-  .hero-subtitle {
-    font-size: 1.1rem !important;
-  }
-}
-
-/* ----------------------------------------------------------
-   Modal Scrollbar Styling
-   ---------------------------------------------------------- */
-@media (max-width: 767px) {
+  /* Mobile menu links */
   .mobile-menu a {
-    font-size: 1.1rem !important;
+    font-family: var(--font-heading);
+    font-size: 1.15rem !important;
+    font-weight: 400;
     padding: 0.5rem 0;
   }
 }
 
-/* ----------------------------------------------------------
-   Smooth scrolling for the entire document
-   ---------------------------------------------------------- */
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 80px;
-}
-
-/* ----------------------------------------------------------
-   Selection color
-   ---------------------------------------------------------- */
-::selection {
-  background: rgba(0, 109, 119, 0.2);
-  color: #006D77;
-}
-
-/* ----------------------------------------------------------
-   Scrollbar styling
-   ---------------------------------------------------------- */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #FFFDF7;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #006D77;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #005a63;
+@media (max-width: 480px) {
+  .amenities-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
 }

@@ -28,6 +28,10 @@ interface RoomData {
    ---------------------------------------------------------- */
 import Amenities from './pages/Amenities'
 import Rates from './pages/Rates'
+import Packages from './pages/Packages'
+import ContactSection from './pages/ContactSection'
+
+
 
 const rooms: RoomData[] = [
   {
@@ -602,7 +606,7 @@ export default function App() {
               letterSpacing: '-0.01em',
             }}
           >
-            Villa Susane Resort
+            Villa Susane
           </a>
 
           {/* Desktop Nav */}
@@ -759,7 +763,7 @@ export default function App() {
               maxWidth: '700px',
             }}
           >
-            Villa Susane Resort
+            Villa Suzane Events Place
           </h1>
           <p
             className="hero-subtitle"
@@ -991,8 +995,8 @@ export default function App() {
             >
               {/* Embedded Google Maps iframe */}
               <iframe
-                title="Balamban Coastal Resort Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15719.85703767554!2d123.723611!3d10.383333!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a96f0000000000%3A0x0!2sAbucayan%2C%20Balamban%2C%20Cebu!5e0!3m2!1sen!2sph!4v1700000000000"
+                title="Villa Susane Resort Location"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d245.20600457358546!2d123.71970162668845!3d10.477310025899227!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33a9091328822d3d%3A0xd37afc461fcc0b42!2sVilla%20Susane%20Events%20Place!5e0!3m2!1sen!2sus!4v1778309544937!5m2!1sen!2sus"
                 style={{
                   width: '100%',
                   height: '100%',
@@ -1008,278 +1012,21 @@ export default function App() {
       </section>
 
       {/* ====== PACKAGES SECTION ====== */}
-      <section
-        id="packages"
-        style={{
-          background: '#FDFCDC',
-          padding: 'clamp(4rem, 8vw, 8rem) clamp(1rem, 4vw, 3rem)',
-        }}
-      >
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div className="reveal" style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <p style={sectionLabel}>OFFERS</p>
-            <h2 style={sectionHeading}>Curated Stay Packages</h2>
-            <p style={sectionSubtitle}>Choose a package and let us handle the details</p>
-          </div>
+      <Packages onAskAboutThis={() => scrollToSection('#contact')} />
 
-          <div
-            className="packages-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: '2rem',
-            }}
-          >
-            {[
-              {
-                title: 'Romance Retreat',
-                description: 'Couples’ escape with breakfast for two, sunset welcome drinks, and late check-out (subject to availability).',
-                price: 'From \u20b1 12,900',
-                badge: 'POPULAR',
-              },
-              {
-                title: 'Family Fun Getaway',
-                description: 'Room for the whole crew with complimentary kids’ activities, family breakfast, and beach picnic setup.',
-                price: 'From \u20b1 15,800',
-                badge: 'FAMILY',
-              },
-              {
-                title: 'Wellness & Spa Days',
-                description: 'Recharge with spa access, rejuvenating treatments, and a calming wellness session each day.',
-                price: 'From \u20b1 18,500',
-                badge: 'SERENITY',
-              },
-            ].map((pkg, index) => (
-              <div
-                key={pkg.title}
-                className="reveal"
-                style={{
-                  animationDelay: `${index * 0.1}s`,
-                }}
-              >
-                <div
-                  style={{
-                    background: '#FFFDF7',
-                    border: '2px solid #006D77',
-                    borderRadius: '16px',
-                    padding: '1.75rem 1.5rem',
-                    transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                    height: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    position: 'relative',
-                  }}
-                  onMouseEnter={(e) => {
-                    const el = e.currentTarget
-                    el.style.transform = 'translateY(-6px)'
-                    el.style.borderColor = '#FF8360'
-                    el.style.boxShadow = '0 18px 40px rgba(255,131,96,0.15)'
-                  }}
-                  onMouseLeave={(e) => {
-                    const el = e.currentTarget
-                    el.style.transform = 'translateY(0)'
-                    el.style.borderColor = '#006D77'
-                    el.style.boxShadow = 'none'
-                  }}
-                >
-                  {pkg.badge && (
-                    <span
-                      style={{
-                        position: 'absolute',
-                        top: '1rem',
-                        right: '1rem',
-                        background: '#2A9D8F',
-                        color: '#FFFDF7',
-                        fontFamily: 'Inter, sans-serif',
-                        fontWeight: 600,
-                        fontSize: '0.7rem',
-                        padding: '0.35rem 0.8rem',
-                        borderRadius: '50px',
-                        letterSpacing: '0.05em',
-                      }}
-                    >
-                      {pkg.badge}
-                    </span>
-                  )}
 
-                  <h3
-                    style={{
-                      fontFamily: 'Poppins, sans-serif',
-                      fontWeight: 600,
-                      fontSize: '1.35rem',
-                      color: '#006D77',
-                      marginBottom: '0.5rem',
-                      paddingRight: pkg.badge ? '6rem' : 0,
-                    }}
-                  >
-                    {pkg.title}
-                  </h3>
-
-                  <p
-                    style={{
-                      fontFamily: 'Inter, sans-serif',
-                      fontWeight: 400,
-                      fontSize: '0.95rem',
-                      color: '#5E5B52',
-                      lineHeight: 1.6,
-                      marginBottom: '1.25rem',
-                      flex: 1,
-                    }}
-                  >
-                    {pkg.description}
-                  </p>
-
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
-                    <span
-                      style={{
-                        fontFamily: 'Poppins, sans-serif',
-                        fontWeight: 700,
-                        fontSize: '1.35rem',
-                        color: '#FF8360',
-                      }}
-                    >
-                      {pkg.price}
-                    </span>
-                    <a
-                      href="#contact"
-                      onClick={(e) => {
-                        e.preventDefault()
-                        scrollToSection('#contact')
-                      }}
-                      style={{
-                        ...coralBtn,
-                        padding: '0.8rem 1.6rem',
-                        fontSize: '0.9rem',
-                        flexShrink: 0,
-                        textAlign: 'center',
-                      }}
-                      onMouseEnter={(e) => {
-                        const t = e.currentTarget
-                        t.style.background = '#FF9A7A'
-                        t.style.transform = 'translateY(-2px)'
-                        t.style.boxShadow = '0 8px 24px rgba(255,131,96,0.35)'
-                      }}
-                      onMouseLeave={(e) => {
-                        const t = e.currentTarget
-                        t.style.background = '#FF8360'
-                        t.style.transform = 'translateY(0)'
-                        t.style.boxShadow = 'none'
-                      }}
-                    >
-                      Ask About This
-                    </a>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ====== CONTACT / BOOKING INQUIRY ====== */}
-      <section
-        id="contact"
-        style={{
-          background: '#FDFCDC',
-          padding: 'clamp(4rem, 8vw, 8rem) clamp(1rem, 4vw, 3rem)',
-        }}
-      >
-        <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+      <ContactSection
+        coralBtn={coralBtn}
+        sectionLabel={sectionLabel}
+        sectionHeading={sectionHeading}
+        sectionSubtitle={sectionSubtitle}
+        inputFieldStyle={inputFieldStyle}
+        onSubmit={handleContactSubmit}
+      />
 
-          {/* Section Header */}
-          <div className="reveal" style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <p style={sectionLabel}>CONNECT</p>
-            <h2 style={sectionHeading}>Get in Touch</h2>
-            <p style={sectionSubtitle}>Have questions? Send us a message and we'll respond within 24 hours.</p>
-          </div>
 
-          {/* Contact Form */}
-          <form className="reveal" onSubmit={handleContactSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <div
-              className="form-row"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '1.25rem',
-              }}
-            >
-              <div>
-                <label style={{ display: 'block', fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', fontWeight: 500, color: '#006D77', marginBottom: '0.4rem' }}>
-                  Name
-                </label>
-                <input type="text" name="name" required placeholder="Your full name" style={inputFieldStyle} />
-              </div>
-              <div>
-                <label style={{ display: 'block', fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', fontWeight: 500, color: '#006D77', marginBottom: '0.4rem' }}>
-                  Email
-                </label>
-                <input type="email" name="email" required placeholder="your@email.com" style={inputFieldStyle} />
-              </div>
-            </div>
-
-            <div>
-              <label style={{ display: 'block', fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', fontWeight: 500, color: '#006D77', marginBottom: '0.4rem' }}>
-                Phone
-              </label>
-              <input type="tel" name="phone" required placeholder="+63 912 345 6789" style={inputFieldStyle} />
-            </div>
-
-            <div
-              className="form-row"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '1.25rem',
-              }}
-            >
-              <div>
-                <label style={{ display: 'block', fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', fontWeight: 500, color: '#006D77', marginBottom: '0.4rem' }}>
-                  Check-in Date
-                </label>
-                <input type="date" name="checkIn" required style={inputFieldStyle} />
-              </div>
-              <div>
-                <label style={{ display: 'block', fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', fontWeight: 500, color: '#006D77', marginBottom: '0.4rem' }}>
-                  Check-out Date
-                </label>
-                <input type="date" name="checkOut" required style={inputFieldStyle} />
-              </div>
-            </div>
-
-            <div>
-              <label style={{ display: 'block', fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', fontWeight: 500, color: '#006D77', marginBottom: '0.4rem' }}>
-                Message
-              </label>
-              <textarea name="message" rows={4} placeholder="Tell us about your ideal stay..." style={{ ...inputFieldStyle, resize: 'vertical' }} />
-            </div>
-
-            <button
-              type="submit"
-              style={{
-                ...coralBtn,
-                width: '100%',
-                padding: '1.125rem',
-                fontSize: '1rem',
-                marginTop: '0.5rem',
-              }}
-              onMouseEnter={(e) => {
-                const t = e.currentTarget
-                t.style.background = '#FF9A7A'
-                t.style.transform = 'translateY(-2px)'
-                t.style.boxShadow = '0 8px 24px rgba(255,131,96,0.35)'
-              }}
-              onMouseLeave={(e) => {
-                const t = e.currentTarget
-                t.style.background = '#FF8360'
-                t.style.transform = 'translateY(0)'
-                t.style.boxShadow = 'none'
-              }}
-            >
-              Send Inquiry
-            </button>
-          </form>
-        </div>
-      </section>
 
       {/* ====== FOOTER ====== */}
       <footer
@@ -1369,7 +1116,7 @@ export default function App() {
             <div style={{ display: 'flex', gap: '1rem' }}>
               {/* Facebook */}
               <a
-                href="#"
+                href="https://www.facebook.com/villasusane.roomsnvenue"
                 aria-label="Facebook"
                 style={{ color: '#FDFCDC', transition: 'color 0.3s ease' }}
                 onMouseEnter={(e) => { e.currentTarget.style.color = '#FF8360' }}
