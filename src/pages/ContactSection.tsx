@@ -1,6 +1,21 @@
 import './ContactSection.css'
 
-export default function ContactSection({ onSubmit }: { onSubmit: (e: React.FormEvent) => void }) {
+export default function ContactSection({
+  coralBtn: _coralBtn,
+  sectionLabel: _sectionLabel,
+  sectionHeading: _sectionHeading,
+  sectionSubtitle: _sectionSubtitle,
+  inputFieldStyle: _inputFieldStyle,
+  onSubmit,
+}: {
+  coralBtn: React.CSSProperties
+  sectionLabel: React.CSSProperties
+  sectionHeading: React.CSSProperties
+  sectionSubtitle: React.CSSProperties
+  inputFieldStyle: React.CSSProperties
+  onSubmit: (e: React.FormEvent) => void
+}) {
+
   return (
     <section id="contact" className="contact-section" aria-label="Contact">
       <div className="contact-container">
