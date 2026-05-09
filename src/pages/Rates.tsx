@@ -49,50 +49,66 @@ export default function Rates({
   return (
     <section id="rates" className="rates-section">
       <div className="rates-container">
+
+        {/* ── Walk-in Rates ── */}
         <div className="section-header reveal">
           <span className="section-tag">PRICING & ACCESS</span>
-          <h2 className="section-title">Resort Rates</h2>
+          <h2 className="section-title">Walk-In Rates</h2>
           <p className="section-subtitle">
-            On-site pricing tags no bookings. Rates follow weekday vs weekend holiday vs night access,
-            and table cottage capacity.
+            On-site rates vary by weekday, weekend & holiday access, time of day, and cottage or table capacity. No booking required.
           </p>
         </div>
 
-        <div className="rates-list">
+        <div className="walkin-rates-grid reveal">
           {rooms.map((room, index) => (
-            <div key={room.id} className={`rate-card reveal ${room.badge ? 'has-badge' : ''}`} style={{ animationDelay: `${index * 0.08}s` }}>
-              {room.badge && <span className="rate-badge">{room.badge}</span>}
-              <div className="rate-card-content">
-                <div className="rate-card-header">
-                  <h3 className="rate-name">{room.name}</h3>
-                </div>
-                <p className="rate-description">{room.description}</p>
-                <div className="rate-footer">
-                  <div className="rate-price-wrapper">
-                    <span className="rate-label">Rate</span>
-                    <span className="rate-price">{room.price}</span>
+            <div
+              key={room.id}
+              className={`walkin-rate-card ${room.badge ? 'walkin-rate-card--featured' : ''}`}
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <div className="walkin-rate-content">
+                <div className="walkin-rate-info">
+                  <div className="walkin-rate-header">
+                    <h3 className="walkin-rate-name">{room.name}</h3>
+                    {room.badge && <span className="walkin-rate-badge">{room.badge}</span>}
                   </div>
-                  <div className="rate-guests">{room.guests}</div>
+                  <span className="walkin-rate-guests">{room.guests}</span>
+                </div>
+                <div className="walkin-rate-price-block">
+                  <span className="walkin-rate-price">{room.price}</span>
+                  <span className="walkin-rate-period">per entry</span>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
+        {/* ── Divider ── */}
+        <div className="section-divider reveal" aria-hidden="true">
+          <span className="divider-line" />
+          <span className="divider-icon">✦</span>
+          <span className="divider-line" />
+        </div>
+
+        {/* ── Cabanas & Suites ── */}
         <div className="hotel-rooms-section">
           <div className="section-header reveal">
             <span className="section-tag">STAY WITH US</span>
-            <h2 className="section-title">Our Cabanas and Suites</h2>
+            <h2 className="section-title">Cabanas & Suites</h2>
           </div>
 
           <div className="room-grid">
             {hotelRooms.map((room, index) => (
-              <div key={room.id} className={`room-card-wrapper reveal`} style={{ animationDelay: `${index * 0.12}s` }}>
+              <div
+                key={room.id}
+                className="room-card-wrapper reveal"
+                style={{ animationDelay: `${index * 0.12}s` }}
+              >
                 <div className="room-card">
                   {room.badge && <span className="room-badge">{room.badge}</span>}
                   <div className="room-image">
                     <img src={room.image} alt={room.name} loading="lazy" />
-                    <div className="image-overlay"></div>
+                    <div className="image-overlay" />
                   </div>
                   <div className="room-content">
                     <h3 className="room-title">{room.name}</h3>
@@ -104,12 +120,9 @@ export default function Rates({
                       </div>
                       <div className="room-guests">{room.guests}</div>
                     </div>
-                    <button 
-                      className="book-button"
-                      onClick={() => onBook(room)}
-                    >
-                      <span>Book Now</span>
-                      <svg className="button-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <button className="book-button" onClick={() => onBook(room)}>
+                      <span>Reserve</span>
+                      <svg className="button-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </button>
@@ -119,6 +132,7 @@ export default function Rates({
             ))}
           </div>
         </div>
+
       </div>
     </section>
   )
