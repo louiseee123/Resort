@@ -1,5 +1,7 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import './App.css'
+import HeroSection from './pages/HeroSection'
+
 
 import AdminReservations from './pages/AdminReservations'
 
@@ -409,7 +411,7 @@ export default function App() {
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedRoom, setSelectedRoom] = useState<RoomData | null>(null)
   const [alert, setAlert] = useState<{ message: string; color: string } | null>(null)
-  const heroRef = useRef<HTMLElement>(null)
+
 
   useScrollReveal()
 
@@ -690,135 +692,7 @@ export default function App() {
       </header>
 
       {/* ====== HERO SECTION ====== */}
-      <section
-        id="home"
-        ref={heroRef}
-        style={{
-          minHeight: '100vh',
-          width: '100%',
-          position: 'relative',
-          display: 'flex',
-          alignItems: 'center',
-          overflow: 'hidden',
-        }}
-      >
-        {/* Background Image */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage: 'url(/hero-bg.jpg)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            animation: 'heroFadeIn 1.2s ease forwards',
-          }}
-        />
-        {/* Gradient Overlay */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'linear-gradient(135deg, rgba(0,109,119,0.60) 0%, rgba(0,109,119,0) 60%)',
-            animation: 'heroFadeIn 0.8s ease 0.3s forwards',
-            opacity: 0,
-          }}
-        />
-        {/* Hero Content */}
-        <div
-          style={{
-            position: 'relative',
-            zIndex: 2,
-            maxWidth: '1200px',
-            width: '100%',
-            margin: '0 auto',
-            padding: '0 clamp(2rem, 8vw, 6rem)',
-            paddingTop: '80px',
-          }}
-        >
-          <p
-            className="hero-label"
-            style={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 500,
-              fontSize: '0.75rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.15em',
-              color: '#FDFCDC',
-              opacity: 0.9,
-              marginBottom: '1rem',
-            }}
-          >
-            WELCOME TO
-          </p>
-          <h1
-            className="hero-title"
-            style={{
-              fontFamily: 'Poppins, sans-serif',
-              fontWeight: 300,
-              fontSize: 'clamp(3rem, 8vw, 6rem)',
-              color: '#FFFDF7',
-              lineHeight: 1.1,
-              letterSpacing: '-0.02em',
-              marginBottom: '1rem',
-              maxWidth: '700px',
-            }}
-          >
-            Villa Suzane Events Place
-          </h1>
-          <p
-            className="hero-subtitle"
-            style={{
-              fontFamily: 'Inter, sans-serif',
-              fontWeight: 400,
-              fontSize: '1.25rem',
-              color: '#FDFCDC',
-              opacity: 0.95,
-              maxWidth: '500px',
-              lineHeight: 1.5,
-              marginBottom: '2rem',
-            }}
-          >
-            Your private escape in Abucayan, Balamban, Cebu
-          </p>
-          <a
-            href="#rates"
-            onClick={(e) => { e.preventDefault(); scrollToSection('#rates') }}
-
-            className="hero-btn"
-            style={coralBtn}
-            onMouseEnter={(e) => {
-              const t = e.currentTarget
-              t.style.background = '#FF9A7A'
-              t.style.transform = 'translateY(-2px)'
-              t.style.boxShadow = '0 8px 24px rgba(255,131,96,0.35)'
-            }}
-            onMouseLeave={(e) => {
-              const t = e.currentTarget
-              t.style.background = '#FF8360'
-              t.style.transform = 'translateY(0)'
-              t.style.boxShadow = 'none'
-            }}
-          >
-            Check Availability
-          </a>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '2rem',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            zIndex: 2,
-            animation: 'chevronPulse 2s ease-in-out infinite',
-          }}
-        >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{ opacity: 0.7 }}>
-            <path d="M6 9l6 6 6-6" stroke="#FDFCDC" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </div>
-      </section>
+      <HeroSection onLearnMore={() => scrollToSection('#rates')} />
 
       {/* ====== ABOUT / INTRODUCTION ====== */}
       <section

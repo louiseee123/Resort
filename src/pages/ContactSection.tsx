@@ -1,11 +1,11 @@
 import './ContactSection.css'
 
 export default function ContactSection({
-  coralBtn: _coralBtn,
-  sectionLabel: _sectionLabel,
-  sectionHeading: _sectionHeading,
-  sectionSubtitle: _sectionSubtitle,
-  inputFieldStyle: _inputFieldStyle,
+  coralBtn,
+  sectionLabel,
+  sectionHeading,
+  sectionSubtitle,
+  inputFieldStyle,
   onSubmit,
 }: {
   coralBtn: React.CSSProperties
@@ -15,6 +15,12 @@ export default function ContactSection({
   inputFieldStyle: React.CSSProperties
   onSubmit: (e: React.FormEvent) => void
 }) {
+  // These props are currently reserved for future styling tweaks.
+  void coralBtn
+  void sectionLabel
+  void sectionHeading
+  void sectionSubtitle
+  void inputFieldStyle
 
   return (
     <section id="contact" className="contact-section" aria-label="Contact">
@@ -50,7 +56,7 @@ export default function ContactSection({
                 </div>
               </div>
             </div>
-            
+
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label" htmlFor="phone">Phone Number</label>
@@ -139,3 +145,4 @@ export default function ContactSection({
     </section>
   )
 }
+

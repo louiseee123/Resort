@@ -13,7 +13,7 @@ const amenities: AmenityData[] = [
     id: 1,
     name: 'Billiards Room',
     description: 'A refined space with a professional-grade table, perfect for friendly games or evening gatherings.',
-    image: 'https://images.unsplash.com/photo-1632432008457-35c2da4e9eaf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     featured: true,
   },
   {
@@ -40,6 +40,25 @@ const amenities: AmenityData[] = [
     description: 'High-speed internet throughout the property, from your cabana to the shoreline.',
     image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     featured: true,
+  },
+  {
+    id: 6,
+    name: 'Spa & Massage Lounge',
+    description: 'Unwind with signature massages and soothing treatments designed to restore your energy.',
+    image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    featured: true,
+  },
+  {
+    id: 7,
+    name: 'Private Cabana Service',
+    description: 'Reserve a cabana for shaded lounging, fresh towels, and attentive poolside assistance.',
+    image: 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  },
+  {
+    id: 8,
+    name: 'Guided Island Experiences',
+    description: 'Explore nearby coves and viewpoints with curated day tours and local guide support.',
+    image: 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
   },
 ]
 
