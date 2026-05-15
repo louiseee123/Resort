@@ -383,3 +383,184 @@
     font-size: 1.4rem;
   }
 }
+/* ============================================================
+   Carousel Styles for Package Images
+   ============================================================ */
+
+/* ============================================================
+   FIXED Carousel Styles for Package Images
+   ============================================================ */
+
+.package-carousel {
+  position: relative;
+  height: 240px;
+  overflow: hidden;
+  background: #d4cbb5;
+  cursor: pointer;
+}
+
+.carousel-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.carousel-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.package-card:hover .carousel-slide img {
+  transform: scale(1.06);
+}
+
+/* Carousel Navigation Buttons */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 4;
+  transition: all 0.2s ease;
+  opacity: 0;
+  pointer-events: none;
+  color: var(--ink, #1A2B2C);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.package-carousel:hover .carousel-btn {
+  opacity: 0.9;
+  pointer-events: auto;
+}
+
+.carousel-btn:hover {
+  background: white;
+  transform: translateY(-50%) scale(1.05);
+  opacity: 1;
+}
+
+.carousel-btn.prev {
+  left: 12px;
+}
+
+.carousel-btn.next {
+  right: 12px;
+}
+
+/* Carousel Dots */
+.carousel-dots {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 4;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.package-carousel:hover .carousel-dots {
+  opacity: 1;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dot.active {
+  background: white;
+  width: 18px;
+  border-radius: 3px;
+}
+
+.dot:hover {
+  background: white;
+  transform: scale(1.2);
+}
+
+/* Keep the hover overlay consistent with carousel */
+.package-carousel .image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(0, 40, 45, 0.35) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.package-carousel:hover .image-overlay {
+  opacity: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .package-carousel {
+    height: 210px;
+  }
+  
+  .carousel-btn {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .carousel-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .package-carousel {
+    height: 185px;
+  }
+  
+  .carousel-dots {
+    bottom: 8px;
+    gap: 6px;
+  }
+  
+  .dot {
+    width: 5px;
+    height: 5px;
+  }
+  
+  .dot.active {
+    width: 14px;
+  }
+}

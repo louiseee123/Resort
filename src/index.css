@@ -51,7 +51,22 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    /* Luxurious theme gradient (site-wide) */
+    background-image:
+      radial-gradient(1200px 600px at 15% 10%, rgba(255, 131, 96, 0.16) 0%, rgba(255, 131, 96, 0) 60%),
+      radial-gradient(1000px 520px at 85% 20%, rgba(42, 157, 143, 0.22) 0%, rgba(42, 157, 143, 0) 55%),
+      linear-gradient(135deg, rgba(0, 109, 119, 0.18) 0%, rgba(255, 253, 247, 0) 45%, rgba(0, 109, 119, 0.12) 100%),
+      /* vignette */
+      radial-gradient(140% 90% at 50% 0%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.10) 100%);
+
+    /* Ensure it shows even if some wrappers are transparent */
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
   }
+
+
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Poppins', sans-serif;
