@@ -17,25 +17,39 @@ export default function Packages({
   onAskAboutThis: () => void
 }) {
   const packages: PackageData[] = [
+     {
+      title: 'Phase 1 Area Package',
+      description: 'Perfect for small gatherings and get togethers.',
+      price: '₱10,000',
+      pax: '10 persons',
+      images: [
+        '/bdayevent1.jpg',
+        '/bdayevent2.jpg',
+        '/bdayevent3.jpg',
+      ],
+      badge: '10 PAX',
+      includes: [
+        'Venue Area only Access',
+        '4-6 Hours Usage',
+        '10 Pax free pool use',
+        'Villa Susane, Abucayan, Balamban, Cebu',
+      ],
+    },
     {
-      title: 'Exclusive Phase 1 Package',
+      title: 'Food Package with Pool Access',
       description: 'Complete venue experience with premium accommodations, private pool access, and entertainment facilities for your special event.',
       price: '₱15,000',
-      pax: 'Up to 20 Persons',
+      pax: 'Up to 20-30 Persons',
       images: [
         '/pool3.jpg',
         '/balconyview1.jpg',
         '/rooms1.jpg',
       ],
-      badge: '20 PAX',
+      badge: '20-30 PAX',
       includes: [
-        'Aircon Accommodations',
-        'Private Pool + Phase 2 Access',
-        'Billiards & Campfire',
-        'Function & Cooking Areas',
-        'Free Wi-Fi & Parking',
-        '₱500/head over 20 pax',
-        '2PM In / 12PM Out',
+        '8 Food trays',
+        'Free entrance and pool access',
+        'Tables and Chairs',
         'Villa Susane, Abucayan, Balamban, Cebu',
       ],
     },
