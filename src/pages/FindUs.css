@@ -1,0 +1,290 @@
+/* ============================================================
+   Find Us Section
+   Palette: #FDFCDC (cream) · #006D77 (teal) · #FF8360 (coral) · #2A9D8F (jade)
+   Typography: Poppins (headings) · Inter (body)
+   ============================================================ */
+
+.findus-section {
+  background: var(--white, #FFFDF7);
+  padding: clamp(4rem, 8vw, 9rem) clamp(1.25rem, 5vw, 4rem);
+  position: relative;
+  overflow: hidden;
+}
+
+.findus-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+.findus-container {
+  max-width: 1180px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Top Rule ── */
+.findus-top-rule {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 4rem;
+  max-width: 1180px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.rule-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--teal, #006D77));
+}
+
+.rule-line:last-child {
+  background: linear-gradient(90deg, var(--teal, #006D77), transparent);
+}
+
+.rule-diamond {
+  font-size: 0.6rem;
+  color: var(--coral, #FF8360);
+  letter-spacing: 0;
+}
+
+/* ── Section Header ── */
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.section-tag {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--coral, #FF8360);
+  margin-bottom: 0.6rem;
+  display: inline-block;
+}
+
+.section-title {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 300;
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  color: var(--ink, #1A2B2C);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+/* ── Grid ── */
+.findus-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+/* ── Map ── */
+.findus-map-wrapper {
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border, rgba(0, 109, 119, 0.12));
+  box-shadow: 0 4px 24px rgba(0, 109, 119, 0.06);
+  aspect-ratio: 4 / 3;
+  background: #d4cbb5;
+  transition: box-shadow 0.4s ease, transform 0.4s ease;
+}
+
+.findus-map-wrapper:hover {
+  box-shadow: 0 16px 48px rgba(0, 109, 119, 0.12);
+  transform: translateY(-4px);
+}
+
+.findus-map-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ── Details ── */
+.findus-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.findus-address {
+  margin-bottom: 0;
+}
+
+.findus-address-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.findus-icon {
+  color: var(--teal, #006D77);
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
+
+.findus-place {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.25rem;
+  color: var(--teal, #006D77);
+  margin: 0 0 0.15rem;
+  line-height: 1.2;
+}
+
+.findus-country {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 0.9rem;
+  color: var(--muted, #6B7B7C);
+  margin: 0;
+}
+
+.findus-description {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 0.95rem;
+  color: var(--muted, #6B7B7C);
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* ── Contact Links ── */
+.findus-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.findus-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 0.9rem;
+  color: var(--muted, #6B7B7C);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  width: fit-content;
+}
+
+.findus-contact-item svg {
+  color: var(--teal, #006D77);
+  flex-shrink: 0;
+}
+
+.findus-contact-item:hover {
+  color: var(--teal, #006D77);
+}
+
+/* ── Button ── */
+.findus-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 60px;
+  background: transparent;
+  color: var(--teal, #006D77);
+  border: 1px solid var(--teal, #006D77);
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  width: fit-content;
+}
+
+.findus-button:hover {
+  background: var(--teal, #006D77);
+  color: var(--cream, #FDFCDC);
+  border-color: var(--teal, #006D77);
+  box-shadow: 0 8px 24px rgba(0, 109, 119, 0.2);
+  transform: translateY(-2px);
+}
+
+.findus-button:active {
+  transform: translateY(0);
+}
+
+.findus-button svg {
+  transition: transform 0.3s ease;
+}
+
+.findus-button:hover svg {
+  transform: translateX(3px);
+}
+
+/* ── Reveal Animation ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: revealUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes revealUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Responsive ── */
+@media (max-width: 767px) {
+  .findus-section {
+    padding: 3.5rem 1.25rem;
+  }
+
+  .findus-top-rule {
+    margin-bottom: 2.5rem;
+  }
+
+  .findus-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .findus-map-wrapper {
+    aspect-ratio: 16 / 9;
+    order: 1;
+  }
+
+  .findus-details {
+    order: 2;
+    gap: 1.25rem;
+  }
+
+  .findus-place {
+    font-size: 1.15rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 2.1rem;
+  }
+
+  .findus-map-wrapper {
+    border-radius: 16px;
+  }
+
+  .findus-button {
+    width: 100%;
+    justify-content: center;
+  }
+}

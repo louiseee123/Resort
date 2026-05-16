@@ -5,71 +5,80 @@ interface AmenityData {
   name: string
   description: string
   image: string
-  featured?: boolean
+  icon: string
+  span?: 'wide' | 'tall' | 'featured' | 'normal'
 }
 
 const amenities: AmenityData[] = [
   {
     id: 1,
-    name: 'Billiards Room',
-    description: 'A refined space with a professional-grade table, perfect for friendly games or evening gatherings.',
-    image: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    featured: true,
+    name: 'Resort Pool',
+    description: 'Two-tier infinity pools with panoramic views, sun loungers, and poolside service.',
+    image: '/pool3.jpg',
+    icon: '',
+    span: 'featured',
   },
   {
     id: 2,
-    name: 'Infinity Pools',
-    description: 'Two-tier infinity pools with panoramic ocean views, sun loungers, and poolside service.',
-    image: 'https://images.unsplash.com/photo-1572331165267-854da2b10ccc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    name: 'Billiards Room',
+    description: 'Professional-grade table for friendly games or evening gatherings.',
+    image: '/recreation1.jpg',
+    icon: '',
+    span: 'tall',
   },
   {
     id: 3,
-    name: 'Breakfast Terrace',
-    description: 'Fresh tropical breakfast served daily with local fruits, pastries, and ocean breezes.',
-    image: 'https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    name: 'Catering and Events Services',
+    description: 'High-speed internet from your cabana to the shoreline.',
+    image: '/bdayevent2.jpg',
+    icon: '',
+    span: 'tall',
   },
   {
     id: 4,
-    name: 'Evening Snacks',
-    description: 'Curated small plates and craft cocktails served at sunset on the beachfront deck.',
-    image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    name: 'Your Favorite Filipino Dishes',
+    description: 'Fresh tropical breakfast served daily with local fruits and ocean breezes.',
+    image: '/foodmenu1.jpg',
+    icon: '',
+    span: 'wide',
   },
   {
     id: 5,
-    name: 'Resort-Wide WiFi',
-    description: 'High-speed internet throughout the property, from your cabana to the shoreline.',
-    image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    featured: true,
+    name: 'Air Conditioned Rooms',
+    description: 'Signature massages and soothing treatments to restore your energy.',
+    image: '/room2.jpg',
+    icon: '',
+    span: 'normal',
   },
   {
     id: 6,
-    name: 'Spa & Massage Lounge',
-    description: 'Unwind with signature massages and soothing treatments designed to restore your energy.',
-    image: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    featured: true,
+    name: 'Your Favorite Brews',
+    description: 'Curated small plates and drinks served at sunset on the beachfront deck.',
+    image: '/matcha1.jpg',
+    icon: '',
+    span: 'normal',
   },
   {
     id: 7,
-    name: 'Private Cabana Service',
-    description: 'Reserve a cabana for shaded lounging, fresh towels, and attentive poolside assistance.',
-    image: 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    name: 'Night Pools',
+    description: 'Shaded lounging with fresh towels and attentive poolside service.',
+    image: '/nightpool1.jpg',
+    icon: '',
+    span: 'normal',
   },
   {
     id: 8,
-    name: 'Guided Island Experiences',
-    description: 'Explore nearby coves and viewpoints with curated day tours and local guide support.',
-    image: 'https://images.unsplash.com/photo-1500375592092-40eb2168fd21?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    name: 'Free wifi',
+    description: 'Explore nearby coves and viewpoints with local guide support.',
+    image: 'https://images.unsplash.com/photo-1537956965359-7573183d1f57?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    icon: '',
+    span: 'wide',
   },
 ]
 
 export default function Amenities() {
   return (
-    <section
-      id="amenities"
-      className="amenities-section"
-      aria-label="Amenities"
-    >
-      {/* Decorative top rule */}
+    <section id="amenities" className="amenities-section" aria-label="Amenities">
       <div className="amenities-top-rule" aria-hidden="true">
         <span className="rule-line" />
         <span className="rule-diamond">◆</span>
@@ -83,22 +92,32 @@ export default function Amenities() {
           <p className="section-subtitle">Every detail designed for your perfect coastal escape</p>
         </div>
 
-        <div className="amenities-grid">
+        <div className="bento-grid">
           {amenities.map((amenity, index) => (
             <div
               key={amenity.id}
-              className="amenity-card-wrapper reveal"
-              style={{ animationDelay: `${index * 0.12}s` }}
+              className={`bento-card bento-${amenity.span || 'normal'} reveal`}
+              style={{ transitionDelay: `${index * 0.07}s` }}
             >
-              <div className="amenity-card">
-                {amenity.featured && <span className="amenity-badge">POPULAR</span>}
-                <div className="amenity-image">
-                  <img src={amenity.image} alt={amenity.name} loading="lazy" />
-                  <div className="image-overlay" />
-                </div>
-                <div className="amenity-content">
-                  <h3 className="amenity-title">{amenity.name}</h3>
-                  <p className="amenity-description">{amenity.description}</p>
+              {amenity.image ? (
+                <>
+                  <img
+                    src={amenity.image}
+                    alt={amenity.name}
+                    className="bento-img"
+                    loading="lazy"
+                  />
+                  <div className="bento-img-overlay" />
+                </>
+              ) : (
+                <div className="bento-no-img" />
+              )}
+
+              <div className="bento-content">
+                <span className="bento-icon" aria-hidden="true">{amenity.icon}</span>
+                <div>
+                  <h3 className="bento-name">{amenity.name}</h3>
+                  <p className="bento-desc">{amenity.description}</p>
                 </div>
               </div>
             </div>
