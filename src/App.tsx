@@ -7,6 +7,7 @@ import Rates from './pages/Rates'
 import Packages from './pages/Packages'
 import ContactSection from './pages/ContactSection'
 import FindUs from './pages/FindUs'
+import PostsSection from './pages/PostsSection'
 
 
 
@@ -604,7 +605,7 @@ export default function App() {
       {/* ══════════════════════════════════════════
           POSTS SECTION
       ══════════════════════════════════════════ */}
-
+      <PostsSection />
 
       {/* ══════════════════════════════════════════
           RATES SECTION
