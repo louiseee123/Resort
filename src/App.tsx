@@ -6,8 +6,8 @@ import Amenities from './pages/Amenities'
 import Rates from './pages/Rates'
 import Packages from './pages/Packages'
 import ContactSection from './pages/ContactSection'
-import PostsSection from './pages/PostsSection'
 import FindUs from './pages/FindUs'
+
 
 
 
@@ -604,7 +604,7 @@ export default function App() {
       {/* ══════════════════════════════════════════
           POSTS SECTION
       ══════════════════════════════════════════ */}
-      <PostsSection />
+
 
       {/* ══════════════════════════════════════════
           RATES SECTION
@@ -619,7 +619,8 @@ export default function App() {
       {/* ══════════════════════════════════════════
           FIND US / LOCATION SECTION
       ══════════════════════════════════════════ */}
-      <FindUs sectionLabel={sectionLabel} sectionHeading={sectionHeading} />
+      <FindUs />
+
 
 
       {/* ══════════════════════════════════════════
