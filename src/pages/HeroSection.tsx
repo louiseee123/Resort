@@ -97,12 +97,7 @@ export default function HeroSection({ onLearnMore }: { onLearnMore: () => void }
       </div>
 
       {/* Scroll Indicator */}
-      <div className="hero-scroll">
-        <div className="hero-scroll-text">Scroll</div>
-        <div className="hero-scroll-line">
-          <div className="hero-scroll-dot" />
-        </div>
-      </div>
+      
 
       {/* Bottom Gradient Fade */}
       <div className="hero-bottom-fade" />

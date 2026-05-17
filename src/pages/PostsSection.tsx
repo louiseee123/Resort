@@ -10,51 +10,84 @@ type Post = {
 const posts: Post[] = [
   {
     id: 'bday',
-    caption: 'Birthday Celebration — curated food trays & beachfront moments',
+    caption: 'Birthday Celebration — Themed Birthday Party with Various Setups',
     image: '/bdayevent1.jpg',
   },
   {
     id: 'bday2',
-     caption: 'Birthday Celebration — curated food trays & beachfront moments',
+     caption: 'Birthday Celebration — Themed Birthday Party with Various Setups',
     image: '/bdayevent2.jpg',
   },
    {
     id: 'bday3',
-     caption: 'Birthday Celebration — curated food trays & beachfront moments', 
+     caption: 'Birthday Celebration — Themed Birthday Party with Various Setups', 
     image: '/bdayevent3.jpg',
   },
   
   {
     id: 'grand1',
-    caption: 'Grand Celebration — premium function hall experience for big groups',
+    caption: 'Grand Celebration — Grand Company Event with Elegant Decoration',
     image: '/gt1.jpg',
   },
   {
     id: 'grand2',
-    caption: 'Grand Celebration — premium function hall experience for big groups',
+    caption: 'Grand Celebration — Grand Company Event with Elegant Decoration',
     image: '/gt2.jpg',
   },
   {
     id: 'grand3',
-    caption: 'Grand Celebration — premium function hall experience for big groups',
+    caption: 'Grand Celebration — Grand Company Event with Elegant Decoration',
     image: '/gt3.jpg',
   },
   {
     id: 'debut1',
-    caption: 'Grand Debut — premium function hall experience for big groups',
+    caption: 'Grand Debut — Themed 18th Birthday Celebration',
     image: '/debut1.jpg',
   },
   {
     id: 'debut2',
-    caption: 'Grand Debut — premium function hall experience for big groups',
+    caption: 'Grand Debut — Themed 18th Birthday Celebration',
     image: '/debut2.jpg',
   },
 
   {
     id: 'debut4',
-    caption: 'Grand Debut — premium function hall experience for big groups',
+    caption: 'Grand Debut — Themed 18th Birthday Celebration',
     image: '/debut3.jpg',
   },
+  {
+    id: 'wedding1',
+    caption: 'Wedding Reception — Themed Wedding Reception with Elegant Moments',
+    image: '/wedding1.jpg',
+  },
+  {
+    id: 'wedding2',
+    caption: 'Wedding Reception — Themed Wedding Reception with Elegant Moments',
+    image: '/wedding2.jpg',
+  }, 
+  {
+    id: 'xmas1',
+    caption: 'Christmas Celebration — Family Christmas Party with Festive Decor',
+    image: '/xmas1.jpg',
+  },
+  {
+    id: 'xmas2',
+    caption: 'Christmas Celebration — Family Christmas Party with Festive Decor',
+    image: '/xmas2.jpg',
+  },
+
+   {
+    id: 'bdayx1',
+    caption: 'Birthday Celebration — Themed Birthday Party with Various Setups',
+    image: '/bday1.jpg',
+  },
+
+   {
+    id: 'bdayx2',
+    caption: 'Birthday Celebration — Themed Birthday Party with Various Setups',
+    image: '/bday2.jpg',
+  },
+  
 
 ]
 
@@ -135,11 +168,7 @@ export default function PostsSection() {
   return (
     <section id="posts" className="posts-section" aria-label="Event Showcase">
       {/* Decorative top rule */}
-      <div className="posts-top-rule" aria-hidden="true">
-        <span className="rule-line" />
-        <span className="rule-diamond">◆</span>
-        <span className="rule-line" />
-      </div>
+     
 
       <div className="posts-container">
         <div className="section-header reveal">

@@ -5,7 +5,7 @@
    ============================================================ */
 
 .findus-section {
-  background: var(--white, #FFFDF7);
+  background: var(--section-peach-gradient, linear-gradient(180deg, #fff7f1 0%, #ffe9dc 100%));
   padding: clamp(4rem, 8vw, 9rem) clamp(1.25rem, 5vw, 4rem);
   position: relative;
   overflow: hidden;

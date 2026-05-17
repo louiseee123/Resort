@@ -79,11 +79,7 @@ const amenities: AmenityData[] = [
 export default function Amenities() {
   return (
     <section id="amenities" className="amenities-section" aria-label="Amenities">
-      <div className="amenities-top-rule" aria-hidden="true">
-        <span className="rule-line" />
-        <span className="rule-diamond">◆</span>
-        <span className="rule-line" />
-      </div>
+     
 
       <div className="amenities-container">
         <div className="section-header reveal">

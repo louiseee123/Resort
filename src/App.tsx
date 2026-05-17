@@ -8,6 +8,7 @@ import Packages from './pages/Packages'
 import ContactSection from './pages/ContactSection'
 import FindUs from './pages/FindUs'
 import PostsSection from './pages/PostsSection'
+import ReviewsSection from './pages/ReviewsSection'
 
 
 
@@ -23,6 +24,27 @@ interface RoomData {
   guests: string
   image: string
   badge?: string
+  priceRows?: { label: string; price: string; note?: string }[]
+}
+
+type ReservationFormData = {
+  checkIn: string
+  checkOut: string
+  guests: string
+  name: string
+  email: string
+  phone: string
+  requests: string
+}
+
+type ReservationSummary = {
+  roomName: string
+  nightlyRate: number
+  nights: number
+  total: number
+  checkInDisplay: string
+  checkOutDisplay: string
+  form: ReservationFormData
 }
 
 /* ----------------------------------------------------------
@@ -32,38 +54,42 @@ const rooms: RoomData[] = [
   {
     id: 1,
     name: 'Weekday Pool Access',
-    description: 'Adults ₱150 · Children (3ft & below) ₱100. Perfect for a relaxed day by the pool.',
-    price: '₱150',
-    guests: 'Adults',
+    description: 'Pool access for weekday walk-in guests.',
+    price: 'PHP 150',
+    guests: 'Walk-in pool access',
     image: '/room-ocean.jpg',
-    badge: 'WEEKDAY DEAL',
+    badge: 'WEEKDAY',
+    priceRows: [
+      { label: 'Adults', price: 'PHP 150' },
+      { label: 'Children', price: 'PHP 100', note: '3ft & below' },
+    ],
   },
   {
     id: 2,
-    name: 'Weekend / Holiday / Night Pool Access',
-    description: 'Adults ₱200 · Children (3ft & below) ₱150. Includes on-site pool use for the day or for night access.',
-    price: '₱200',
-    guests: 'Adults',
+    name: 'Weekend / Holiday Pool Access',
+    description: 'Pool access for weekend and holiday walk-in guests.',
+    price: 'PHP 150',
+    guests: 'Walk-in pool access',
     image: '/room-garden.jpg',
     badge: 'POPULAR',
+    priceRows: [
+      { label: 'Adults', price: 'PHP 150' },
+      { label: 'Children', price: 'PHP 100', note: '3ft & below' },
+    ],
   },
   {
     id: 3,
-    name: 'Table Cottage Rentals (Capacity-Based)',
-    description: '4–6 people: ₱300 · 10–20 people: ₱500 · 20–30 people: ₱1,000. Choose the cottage size that fits your group.',
-    price: '₱300+',
+    name: 'Table Cottage Rentals',
+    description: 'Choose the cottage size that fits your group.',
+    price: 'PHP 300+',
     guests: 'Capacity-based',
     image: '/room-beachfront.jpg',
     badge: 'GROUP FAVORITE',
-  },
-  {
-    id: 4,
-    name: 'Day Use Room (10AM–5PM)',
-    description: '₱2,500 for up to 10 people. Covers full day use from 10:00 AM to 5:00 PM (subject to availability).',
-    price: '₱2,500',
-    guests: 'Up to 10 people',
-    image: '/room-ocean.jpg',
-    badge: 'DAY PASS',
+    priceRows: [
+      { label: '4-6 people', price: 'PHP 300' },
+      { label: '10-20 people', price: 'PHP 500' },
+      { label: '20-30 people', price: 'PHP 1,000' },
+    ],
   },
 ]
 
@@ -74,7 +100,9 @@ const navLinks = [
   { label: 'Amenities', href: '#amenities' },
   { label: 'Location', href: '#location' },
   { label: 'Packages', href: '#packages' },
+   { label: 'Reviews', href: '#reviews' },
   { label: 'Contact', href: '#contact' },
+ 
 ]
 
 /* ----------------------------------------------------------
@@ -133,6 +161,52 @@ function Alert({ message, color, onClose }: { message: string; color: string; on
   )
 }
 
+function formatReservationDate(value: string) {
+  if (!value) return ''
+
+  const [year, month, day] = value.split('-').map(Number)
+  if (!year || !month || !day) return ''
+
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  }).format(new Date(year, month - 1, day))
+}
+
+function parseRoomRate(price: string) {
+  const numeric = price.replace(/[^\d.]/g, '')
+  return Number(numeric) || 0
+}
+
+function formatPeso(value: number) {
+  return new Intl.NumberFormat('en-PH', {
+    style: 'currency',
+    currency: 'PHP',
+    maximumFractionDigits: 0,
+  }).format(value)
+}
+
+function getReservationNights(checkIn: string, checkOut: string) {
+  if (!checkIn || !checkOut) return 0
+
+  const start = new Date(`${checkIn}T00:00:00`)
+  const end = new Date(`${checkOut}T00:00:00`)
+  const nights = Math.round((end.getTime() - start.getTime()) / 86400000)
+
+  return nights > 0 ? nights : 0
+}
+
+function SectionDivider() {
+  return (
+    <div className="section-divider-shell" aria-hidden="true">
+      <span className="section-divider-line" />
+      <span className="section-divider-mark" />
+      <span className="section-divider-line" />
+    </div>
+  )
+}
+
 /* ----------------------------------------------------------
    Booking Modal Component
    ---------------------------------------------------------- */
@@ -145,15 +219,7 @@ function BookingModal({
   room: RoomData | null
   isOpen: boolean
   onClose: () => void
-  onSubmit: (roomName: string, form: {
-    checkIn: string
-    checkOut: string
-    guests: string
-    name: string
-    email: string
-    phone: string
-    requests: string
-  }) => void
+  onSubmit: (roomName: string, form: ReservationFormData) => void
 }) {
   const [formData, setFormData] = useState({
     checkIn: '',
@@ -164,18 +230,83 @@ function BookingModal({
     phone: '',
     requests: '',
   })
+  const [summary, setSummary] = useState<ReservationSummary | null>(null)
+  const [formError, setFormError] = useState('')
+  const [isSending, setIsSending] = useState(false)
 
   if (!isOpen || !room) return null
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    onSubmit(room.name, formData)
+  const checkInDisplay = formatReservationDate(formData.checkIn)
+  const checkOutDisplay = formatReservationDate(formData.checkOut)
+  const nightlyRate = parseRoomRate(room.price)
+  const nights = getReservationNights(formData.checkIn, formData.checkOut)
+  const total = nightlyRate * nights
+
+  const resetAndClose = () => {
+    setSummary(null)
+    setFormError('')
     onClose()
-    setFormData({ checkIn: '', checkOut: '', guests: '2', name: '', email: '', phone: '', requests: '' })
+  }
+
+  const handleReview = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+
+    if (!nights) {
+      setFormError('Please choose a check-out date after your check-in date.')
+      return
+    }
+
+    setFormError('')
+    setSummary({
+      roomName: room.name,
+      nightlyRate,
+      nights,
+      total,
+      checkInDisplay,
+      checkOutDisplay,
+      form: formData,
+    })
+  }
+
+  const sendReservation = async () => {
+    if (!summary) return
+
+    setIsSending(true)
+    const payload = new FormData()
+    payload.append('subject', `${summary.roomName} Reservation!`)
+    payload.append('Room Name', summary.roomName)
+    payload.append('Nightly Rate', formatPeso(summary.nightlyRate))
+    payload.append('Number of Nights', String(summary.nights))
+    payload.append('Total Amount', formatPeso(summary.total))
+    payload.append('Check-in Date', summary.checkInDisplay)
+    payload.append('Check-out Date', summary.checkOutDisplay)
+    payload.append('Number of Guests', summary.form.guests)
+    payload.append('Full Name', summary.form.name)
+    payload.append('Email', summary.form.email)
+    payload.append('Phone', summary.form.phone)
+    payload.append('Special Requests', summary.form.requests || 'None')
+
+    try {
+      const response = await fetch('https://formspree.io/f/mlgvrkjd', {
+        method: 'POST',
+        body: payload,
+        headers: { Accept: 'application/json' },
+      })
+
+      if (!response.ok) throw new Error('Unable to send reservation.')
+
+      onSubmit(summary.roomName, summary.form)
+      setIsSending(false)
+      resetAndClose()
+    } catch {
+      setIsSending(false)
+      setFormError('We could not send the reservation right now. Please try again in a moment.')
+    }
   }
 
   return (
     <div
+      className="reservation-modal-shell"
       style={{
         position: 'fixed',
         inset: 0,
@@ -187,9 +318,10 @@ function BookingModal({
         justifyContent: 'center',
         padding: '1rem',
       }}
-      onClick={onClose}
+      onClick={resetAndClose}
     >
       <div
+        className={`reservation-modal${summary ? ' reservation-modal--confirmation' : ''}`}
         style={{
           background: '#FFFDF7',
           border: '2px solid #006D77',
@@ -204,7 +336,9 @@ function BookingModal({
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          onClick={onClose}
+          onClick={resetAndClose}
+          className="reservation-close-button"
+          aria-label="Close reservation"
           style={{
             position: 'absolute',
             top: '1rem',
@@ -228,6 +362,8 @@ function BookingModal({
           ✕
         </button>
 
+        {!summary ? (
+          <>
         <h3
           style={{
             fontFamily: 'Poppins, sans-serif',
@@ -250,14 +386,18 @@ function BookingModal({
           {room.price} / night · {room.guests}
         </p>
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <form
+          onSubmit={handleReview}
+          className="reservation-form"
+          style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+        >
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             <div className="form-field">
               <label className="form-label">Check-in Date</label>
               <input
                 type="date"
                 required
-                className="form-input"
+                className="form-input reservation-native-date"
                 value={formData.checkIn}
                 onChange={(e) => setFormData({ ...formData, checkIn: e.target.value })}
               />
@@ -267,11 +407,17 @@ function BookingModal({
               <input
                 type="date"
                 required
-                className="form-input"
+                min={formData.checkIn || undefined}
+                className="form-input reservation-native-date"
                 value={formData.checkOut}
                 onChange={(e) => setFormData({ ...formData, checkOut: e.target.value })}
               />
             </div>
+          </div>
+
+          <div className="reservation-total-preview">
+            <span>{nights || 0} night{nights === 1 ? '' : 's'} selected</span>
+            <strong>{formatPeso(total)}</strong>
           </div>
 
           <div className="form-field">
@@ -282,6 +428,7 @@ function BookingModal({
               max={30}
               required
               className="form-input"
+              name="Number of Guests"
               value={formData.guests}
               onChange={(e) => setFormData({ ...formData, guests: e.target.value })}
             />
@@ -293,6 +440,7 @@ function BookingModal({
               type="text"
               required
               className="form-input"
+              name="Full Name"
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             />
@@ -304,6 +452,7 @@ function BookingModal({
               type="email"
               required
               className="form-input"
+              name="Email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             />
@@ -315,6 +464,7 @@ function BookingModal({
               type="tel"
               required
               className="form-input"
+              name="Phone"
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             />
@@ -325,19 +475,75 @@ function BookingModal({
             <textarea
               rows={3}
               className="form-textarea"
+              name="Special Requests"
               value={formData.requests}
               onChange={(e) => setFormData({ ...formData, requests: e.target.value })}
             />
           </div>
 
+          {formError && <p className="reservation-error">{formError}</p>}
+
           <button
             type="submit"
-            className="btn btn-coral"
+            className="submit-button reservation-submit-button"
             style={{ width: '100%', justifyContent: 'center', marginTop: '0.5rem' }}
           >
-            Confirm Reservation
+            Review Inquiry
           </button>
         </form>
+          </>
+        ) : (
+          <div className="reservation-confirmation">
+            <span className="form-intro-step">Confirm details</span>
+            <h3>{summary.roomName} Reservation!</h3>
+            <p className="reservation-confirmation-copy">Please review the details before we send your inquiry.</p>
+
+            <div className="reservation-total-card">
+              <span>Total to be paid</span>
+              <strong>{formatPeso(summary.total)}</strong>
+              <small>{formatPeso(summary.nightlyRate)} x {summary.nights} night{summary.nights === 1 ? '' : 's'}</small>
+            </div>
+
+            <div className="reservation-summary-grid">
+              {[
+                ['Guest', summary.form.name],
+                ['Email', summary.form.email],
+                ['Phone', summary.form.phone],
+                ['Guests', summary.form.guests],
+                ['Check-in', summary.checkInDisplay],
+                ['Check-out', summary.checkOutDisplay],
+              ].map(([label, value]) => (
+                <div className="reservation-summary-item" key={label}>
+                  <span>{label}</span>
+                  <strong>{value}</strong>
+                </div>
+              ))}
+            </div>
+
+            {summary.form.requests && (
+              <div className="reservation-summary-note">
+                <span>Special Requests</span>
+                <p>{summary.form.requests}</p>
+              </div>
+            )}
+
+            {formError && <p className="reservation-error">{formError}</p>}
+
+            <div className="reservation-confirmation-actions">
+              <button type="button" className="reservation-secondary-button" onClick={() => setSummary(null)} disabled={isSending}>
+                Edit Details
+              </button>
+              <button type="button" className="submit-button reservation-submit-button" onClick={sendReservation} disabled={isSending}>
+                <span>{isSending ? 'Sending...' : 'Send Reservation'}</span>
+                {!isSending && (
+                  <svg className="button-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
@@ -412,12 +618,6 @@ export default function App() {
     },
     []
   )
-
-  const handleContactSubmit = useCallback((e: React.FormEvent) => {
-    e.preventDefault()
-    setAlert({ message: "Thank you for your inquiry! We'll be in touch soon.", color: '#2A9D8F' })
-    ;(e.target as HTMLFormElement).reset()
-  }, [])
 
   const scrollToSection = (href: string) => {
     setMobileMenuOpen(false)
@@ -601,26 +801,32 @@ export default function App() {
           HERO SECTION
       ══════════════════════════════════════════ */}
       <HeroSection onLearnMore={() => scrollToSection('#rates')} />
+      <SectionDivider />
 
       {/* ══════════════════════════════════════════
           POSTS SECTION
       ══════════════════════════════════════════ */}
       <PostsSection />
+      <SectionDivider />
 
       {/* ══════════════════════════════════════════
           RATES SECTION
       ══════════════════════════════════════════ */}
       <Rates rooms={rooms} onBook={openBookingModal} />
+      <SectionDivider />
 
       {/* ══════════════════════════════════════════
           AMENITIES SECTION
       ══════════════════════════════════════════ */}
       <Amenities />
+      <SectionDivider />
 
       {/* ══════════════════════════════════════════
           FIND US / LOCATION SECTION
       ══════════════════════════════════════════ */}
       <FindUs />
+      
+      <SectionDivider />
 
 
 
@@ -628,6 +834,10 @@ export default function App() {
           PACKAGES SECTION
       ══════════════════════════════════════════ */}
       <Packages onAskAboutThis={() => scrollToSection('#contact')} />
+      <SectionDivider />
+      <SectionDivider />
+      <ReviewsSection />
+      <SectionDivider />
 
       {/* ══════════════════════════════════════════
           CONTACT SECTION
@@ -638,16 +848,16 @@ export default function App() {
         sectionHeading={sectionHeading}
         sectionSubtitle={sectionSubtitle}
         inputFieldStyle={inputFieldStyle}
-        onSubmit={handleContactSubmit}
       />
+      
 
       {/* ══════════════════════════════════════════
           FOOTER
       ══════════════════════════════════════════ */}
       <footer
         style={{
-          background: 'linear-gradient(160deg, #006D77 0%, #004f57 100%)',
-          color: '#FDFCDC',
+          background: 'var(--section-white)',
+          color: '#1A2B2C',
           padding: 'clamp(3rem, 6vw, 4rem) clamp(1rem, 4vw, 3rem) 0',
           position: 'relative',
           overflow: 'hidden',
@@ -662,7 +872,7 @@ export default function App() {
             width: '400px',
             height: '400px',
             borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(255,131,96,0.12) 0%, transparent 70%)',
+            background: 'transparent',
             pointerEvents: 'none',
           }}
         />
@@ -682,10 +892,10 @@ export default function App() {
         >
           {/* Column 1: Brand */}
           <div>
-            <h3 style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 400, fontSize: '1.5rem', color: '#FFFDF7', marginBottom: '0.5rem' }}>
+            <h3 style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 400, fontSize: '1.5rem', color: '#1A2B2C', marginBottom: '0.5rem' }}>
               Villa Susane Resort
             </h3>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300, fontSize: '0.9rem', color: 'rgba(253,252,220,0.7)', lineHeight: 1.7 }}>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontWeight: 300, fontSize: '0.9rem', color: '#6B7B7C', lineHeight: 1.7 }}>
               Your private escape on the western coast of Cebu.
             </p>
           </div>
@@ -695,14 +905,14 @@ export default function App() {
             <h4 style={{ fontFamily: 'Inter, sans-serif', fontWeight: 500, fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#FF8360', marginBottom: '1rem' }}>
               Contact
             </h4>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.9rem', color: 'rgba(253,252,220,0.8)', marginBottom: '0.5rem', lineHeight: 1.7 }}>
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.9rem', color: '#6B7B7C', marginBottom: '0.5rem', lineHeight: 1.7 }}>
               Abucayan, Balamban, Cebu, Philippines
             </p>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.9rem', color: 'rgba(253,252,220,0.8)', marginBottom: '0.5rem' }}>
-              +63 (032) 123 4567
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.9rem', color: '#6B7B7C', marginBottom: '0.5rem' }}>
+              0929 479 9835
             </p>
-            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.9rem', color: 'rgba(253,252,220,0.8)' }}>
-              reservations@balambanresort.ph
+            <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.9rem', color: '#6B7B7C' }}>
+              balambanbooking@gmail.com
             </p>
           </div>
 
@@ -734,12 +944,12 @@ export default function App() {
                   href={href}
                   aria-label={label}
                   style={{
-                    color: 'rgba(253,252,220,0.8)',
+                    color: '#006D77',
                     transition: 'color 0.25s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1)',
                     display: 'inline-flex',
                   }}
                   onMouseEnter={(e) => { e.currentTarget.style.color = '#FF8360'; e.currentTarget.style.transform = 'translateY(-3px)' }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = 'rgba(253,252,220,0.8)'; e.currentTarget.style.transform = 'translateY(0)' }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = '#006D77'; e.currentTarget.style.transform = 'translateY(0)' }}
                 >
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
                     <path d={path} />
@@ -755,7 +965,7 @@ export default function App() {
           style={{
             maxWidth: '1200px',
             margin: '0 auto',
-            borderTop: '1px solid rgba(253,252,220,0.12)',
+            borderTop: '1px solid rgba(255,131,96,0.22)',
             padding: '1.5rem 0',
             display: 'flex',
             justifyContent: 'space-between',
@@ -766,10 +976,10 @@ export default function App() {
             zIndex: 1,
           }}
         >
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', color: 'rgba(253,252,220,0.45)' }}>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', color: '#6B7B7C' }}>
             © 2024 Balamban Coastal Resort. All rights reserved.
           </p>
-          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', color: 'rgba(253,252,220,0.45)' }}>
+          <p style={{ fontFamily: 'Inter, sans-serif', fontSize: '0.8rem', color: '#6B7B7C' }}>
             Privacy Policy | Terms of Service
           </p>
         </div>

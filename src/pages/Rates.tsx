@@ -6,6 +6,7 @@ export type RateRoom = {
   guests: string
   image: string
   badge?: string
+  priceRows?: { label: string; price: string; note?: string }[]
   inclusions?: { icon: string; label: string; value: string }[]
   images?: { url: string; label: string }[]
 }
@@ -45,10 +46,30 @@ export default function Rates({
       ],
     },
     {
+      id: 103,
+      name: 'Day Use Room',
+      description: 'A comfortable room option for daytime visits and small group rest breaks.',
+      price: 'PHP 2,500',
+      guests: 'Up to 10 guests',
+      image: '/room-ocean.jpg',
+      badge: '10AM-5PM',
+      images: [
+        { url: '/rooms1.jpg', label: 'Day Use Room' },
+        { url: '/balcony1.jpg', label: 'Relaxing Balcony' },
+        { url: '/pool.jpg', label: 'Pool Access Nearby' },
+      ],
+      inclusions: [
+        { icon: '', label: 'Use Time', value: '10:00 AM - 5:00 PM' },
+        { icon: '', label: 'Guests', value: 'Up to 10 people' },
+        { icon: '', label: 'Rate', value: 'PHP 2,500' },
+        { icon: '', label: 'Availability', value: 'Subject to schedule' },
+      ],
+    },
+    {
       id: 102,
       name: 'Standard Room',
       description: 'Nestled among tropical gardens with a private terrace.',
-      price: '₱2,000',
+      price: 'PHP 2,500',
       guests: '2-4 guests',
       image: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
       badge: '2-4 PAX',
@@ -102,16 +123,24 @@ export default function Rates({
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className="walkin-rate-content">
-                <div className="walkin-rate-info">
-                  <div className="walkin-rate-header">
+                <div className="walkin-rate-header">
+                  <div>
                     <h3 className="walkin-rate-name">{room.name}</h3>
-                    {room.badge && <span className="walkin-rate-badge">{room.badge}</span>}
+                    <span className="walkin-rate-guests">{room.guests}</span>
                   </div>
-                  <span className="walkin-rate-guests">{room.guests}</span>
+                  {room.badge && <span className="walkin-rate-badge">{room.badge}</span>}
                 </div>
-                <div className="walkin-rate-price-block">
-                  <span className="walkin-rate-price">{room.price}</span>
-                  <span className="walkin-rate-period">per entry</span>
+                <p className="walkin-rate-description">{room.description}</p>
+                <div className="walkin-price-list">
+                  {(room.priceRows || [{ label: 'Rate', price: room.price }]).map((row) => (
+                    <div className="walkin-price-row" key={`${room.id}-${row.label}`}>
+                      <div>
+                        <span className="walkin-price-label">{row.label}</span>
+                        {row.note && <span className="walkin-price-note">{row.note}</span>}
+                      </div>
+                      <span className="walkin-rate-price">{row.price}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -119,11 +148,7 @@ export default function Rates({
         </div>
 
         {/* ── Divider ── */}
-        <div className="section-divider reveal" aria-hidden="true">
-          <span className="divider-line" />
-          <span className="divider-icon">✦</span>
-          <span className="divider-line" />
-        </div>
+        
 
         {/* ── Room Cards ── */}
         <div className="hotel-rooms-section">
@@ -240,7 +265,7 @@ export default function Rates({
                     )}
 
                     <button className="book-button" onClick={() => onBook(room)}>
-                      <span>Reserve</span>
+                      <span>Inquire</span>
                       <svg className="button-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>

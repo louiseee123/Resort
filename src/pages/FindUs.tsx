@@ -4,11 +4,7 @@ export default function FindUs() {
   return (
     <section id="location" className="findus-section" aria-label="Location">
       {/* Decorative top rule */}
-      <div className="findus-top-rule" aria-hidden="true">
-        <span className="rule-line" />
-        <span className="rule-diamond">◆</span>
-        <span className="rule-line" />
-      </div>
+     
 
       <div className="findus-container">
         <div className="section-header reveal">
@@ -55,12 +51,12 @@ export default function FindUs() {
                 </svg>
                 +63 (032) 123 4567
               </a>
-              <a href="mailto:reservations@balambanresort.ph" className="findus-contact-item">
+              <a href="mailto:johnlouisebergs123@gmail.com" className="findus-contact-item">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   <path d="M22 6l-10 7L2 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                reservations@balambanresort.ph
+                johnlouisebergs123@gmail.com
               </a>
             </div>
 
