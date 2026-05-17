@@ -230,11 +230,7 @@ export default function Packages({
 
   return (
     <section id="packages" className="packages-section" aria-label="Packages">
-      <div className="packages-top-rule" aria-hidden="true">
-        <span className="rule-line" />
-        <span className="rule-diamond">◆</span>
-        <span className="rule-line" />
-      </div>
+      
 
       <div className="packages-container">
         <div className="section-header reveal">

@@ -48,7 +48,7 @@
 
 /* ── Section Shell ── */
 .rates-section {
-  background: var(--cream);
+  background: var(--section-peach-gradient, linear-gradient(180deg, #fff7f1 0%, #ffe9dc 100%));
   padding: clamp(4rem, 8vw, 9rem) clamp(1.25rem, 5vw, 4rem);
   position: relative;
   overflow: hidden;
@@ -110,16 +110,15 @@
 /* ── Walk-In Rates Grid ── */
 .walkin-rates-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1rem;
   margin-bottom: 3.5rem;
 }
 
 .walkin-rate-card {
-  background: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.82);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 14px;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -150,10 +149,9 @@
 
 .walkin-rate-content {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.25rem;
-  gap: 1rem;
+  flex-direction: column;
+  padding: 1.15rem 1.25rem;
+  gap: 0.85rem;
 }
 
 .walkin-rate-info {
@@ -165,9 +163,9 @@
 
 .walkin-rate-header {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.85rem;
 }
 
 .walkin-rate-name {
@@ -195,24 +193,57 @@
 .walkin-rate-guests {
   font-family: 'Inter', sans-serif;
   font-weight: 300;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: var(--muted);
 }
 
-.walkin-rate-price-block {
+.walkin-rate-description {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.walkin-price-list {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  flex-shrink: 0;
+  gap: 0.45rem;
+}
+
+.walkin-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  border-top: 1px solid rgba(0, 109, 119, 0.1);
+}
+
+.walkin-price-label {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--ink);
+}
+
+.walkin-price-note {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem;
+  color: var(--muted);
+  line-height: 1.3;
 }
 
 .walkin-rate-price {
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
-  font-size: 1.35rem;
+  font-size: 1.05rem;
   color: var(--teal);
   letter-spacing: -0.02em;
   line-height: 1.2;
+  white-space: nowrap;
 }
 
 .walkin-rate-period {
