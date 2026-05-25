@@ -1,0 +1,23 @@
+{
+  "name": "villa-susane-studio",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "sanity dev",
+    "start": "sanity dev",
+    "build": "sanity build",
+    "deploy": "sanity deploy"
+  },
+  "dependencies": {
+    "@sanity/presentation": "^2.0.0",
+    "@sanity/vision": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "sanity": "latest",
+    "styled-components": "^6.1.0"
+  },
+  "devDependencies": {
+    "typescript": "latest"
+  }
+}

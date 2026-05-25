@@ -11,8 +11,26 @@ export type RateRoom = {
   images?: { url: string; label: string }[]
 }
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { client } from '../sanityClient'
 import './Rates.css'
+
+type RatesContent = {
+  walkInEyebrow: string
+  walkInTitle: string
+  walkInSubtitle: string
+  roomsEyebrow: string
+  roomsTitle: string
+}
+
+const fallbackRatesContent: RatesContent = {
+  walkInEyebrow: 'PRICING & ACCESS',
+  walkInTitle: 'Walk-In Rates',
+  walkInSubtitle:
+    'On-site rates vary by weekday, weekend & holiday access, time of day, and cottage or table capacity. No booking required.',
+  roomsEyebrow: 'STAY WITH US',
+  roomsTitle: 'Rooms',
+}
 
 export default function Rates({
   rooms,
@@ -22,6 +40,9 @@ export default function Rates({
   onBook: (room: RateRoom) => void
 }) {
   const [activeImageIndex, setActiveImageIndex] = useState<Record<number, number>>({})
+  const [content, setContent] = useState<RatesContent>(fallbackRatesContent)
+  const [walkInRates, setWalkInRates] = useState<RateRoom[]>([])
+  const [cmsRooms, setCmsRooms] = useState<RateRoom[]>([])
 
   // Room data with carousel images and inclusions
   const hotelRooms: RateRoom[] = [
@@ -89,6 +110,106 @@ export default function Rates({
     
   ]
 
+  useEffect(() => {
+    let isMounted = true
+
+    Promise.all([
+      client.fetch<Partial<RatesContent> | null>(`
+        *[_type == "ratesSection"][0]{
+          walkInEyebrow,
+          walkInTitle,
+          walkInSubtitle,
+          roomsEyebrow,
+          roomsTitle
+        }
+      `),
+      client.fetch<Array<Omit<RateRoom, 'id' | 'image'> & { _id: string }>>(`
+        *[_type == "walkInRate"] | order(_createdAt asc){
+          _id,
+          name,
+          description,
+          guests,
+          badge,
+          priceRows
+        }
+      `),
+      client.fetch<Array<Omit<RateRoom, 'id' | 'image' | 'inclusions' | 'images'> & {
+        _id: string
+        inclusions?: { label: string; value: string }[]
+        images?: { url: string; label: string }[]
+      }>>(`
+        *[_type == "room"] | order(_createdAt asc){
+          _id,
+          name,
+          description,
+          price,
+          guests,
+          badge,
+          inclusions[]{label, value},
+          "images": images[]{label, "url": image.asset->url}
+        }
+      `),
+    ])
+      .then(([sectionData, walkInData, roomData]) => {
+        if (!isMounted) return
+
+        if (sectionData) {
+          setContent({
+            ...fallbackRatesContent,
+            ...sectionData,
+          })
+        }
+
+        if (walkInData.length) {
+          setWalkInRates(
+            walkInData.map((rate, index) => ({
+              id: index + 1,
+              name: rate.name,
+              description: rate.description,
+              price: rate.price || rate.priceRows?.[0]?.price || '',
+              guests: rate.guests,
+              image: '',
+              badge: rate.badge,
+              priceRows: rate.priceRows,
+            })),
+          )
+        }
+
+        if (roomData.length) {
+          setCmsRooms(
+            roomData.map((room, index) => {
+              const fallbackRoom = hotelRooms[index % hotelRooms.length]
+              const images = room.images?.filter((image) => image.url) || []
+
+              return {
+                ...fallbackRoom,
+                ...room,
+                id: index + 101,
+                image: images[0]?.url || fallbackRoom.image,
+                images: images.length ? images : fallbackRoom.images,
+                inclusions: room.inclusions?.length
+                  ? room.inclusions.map((item) => ({ icon: '', ...item }))
+                  : fallbackRoom.inclusions,
+              }
+            }),
+          )
+        }
+      })
+      .catch(() => {
+        if (!isMounted) return
+        setContent(fallbackRatesContent)
+        setWalkInRates([])
+        setCmsRooms([])
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  const displayedWalkInRates = walkInRates.length ? walkInRates : rooms
+  const displayedRooms = cmsRooms.length ? cmsRooms : hotelRooms
+
   const nextImage = (roomId: number, imagesLength: number) => {
     setActiveImageIndex((prev) => {
       const current = prev[roomId] ?? 0
@@ -108,15 +229,13 @@ export default function Rates({
       <div className="rates-container">
         {/* ── Walk-in Rates ── */}
         <div className="section-header reveal">
-          <span className="section-tag">PRICING & ACCESS</span>
-          <h2 className="section-title">Walk-In Rates</h2>
-          <p className="section-subtitle">
-            On-site rates vary by weekday, weekend & holiday access, time of day, and cottage or table capacity. No booking required.
-          </p>
+          <span className="section-tag" data-sanity="ratesSection.walkInEyebrow">{content.walkInEyebrow}</span>
+          <h2 className="section-title" data-sanity="ratesSection.walkInTitle">{content.walkInTitle}</h2>
+          <p className="section-subtitle" data-sanity="ratesSection.walkInSubtitle">{content.walkInSubtitle}</p>
         </div>
 
         <div className="walkin-rates-grid reveal">
-          {rooms.map((room, index) => (
+          {displayedWalkInRates.map((room, index) => (
             <div
               key={room.id}
               className={`walkin-rate-card ${room.badge ? 'walkin-rate-card--featured' : ''}`}
@@ -125,13 +244,13 @@ export default function Rates({
               <div className="walkin-rate-content">
                 <div className="walkin-rate-header">
                   <div>
-                    <h3 className="walkin-rate-name">{room.name}</h3>
-                    <span className="walkin-rate-guests">{room.guests}</span>
+                    <h3 className="walkin-rate-name" data-sanity="walkInRate.name">{room.name}</h3>
+                    <span className="walkin-rate-guests" data-sanity="walkInRate.guests">{room.guests}</span>
                   </div>
-                  {room.badge && <span className="walkin-rate-badge">{room.badge}</span>}
+                  {room.badge && <span className="walkin-rate-badge" data-sanity="walkInRate.badge">{room.badge}</span>}
                 </div>
-                <p className="walkin-rate-description">{room.description}</p>
-                <div className="walkin-price-list">
+                <p className="walkin-rate-description" data-sanity="walkInRate.description">{room.description}</p>
+                <div className="walkin-price-list" data-sanity="walkInRate.priceRows">
                   {(room.priceRows || [{ label: 'Rate', price: room.price }]).map((row) => (
                     <div className="walkin-price-row" key={`${room.id}-${row.label}`}>
                       <div>
@@ -153,12 +272,12 @@ export default function Rates({
         {/* ── Room Cards ── */}
         <div className="hotel-rooms-section">
           <div className="section-header reveal">
-            <span className="section-tag">STAY WITH US</span>
-            <h2 className="section-title">Rooms</h2>
+            <span className="section-tag" data-sanity="ratesSection.roomsEyebrow">{content.roomsEyebrow}</span>
+            <h2 className="section-title" data-sanity="ratesSection.roomsTitle">{content.roomsTitle}</h2>
           </div>
 
           <div className="room-grid">
-            {hotelRooms.map((room, idx) => {
+            {displayedRooms.map((room, idx) => {
               const current = activeImageIndex[room.id] ?? 0
               const images = room.images || []
               const imagesCount = images.length || 1
@@ -183,6 +302,7 @@ export default function Rates({
                               alt={img.label}
                               className="room-carousel-image"
                               loading="lazy"
+                              data-sanity="room.images"
                             />
                             <div className="room-carousel-overlay">
                               <span className="room-carousel-label">{img.label}</span>
@@ -193,7 +313,7 @@ export default function Rates({
                     </div>
 
                     {/* Badge */}
-                    {room.badge && <span className="room-badge">{room.badge}</span>}
+                    {room.badge && <span className="room-badge" data-sanity="room.badge">{room.badge}</span>}
 
                     {/* Arrows */}
                     {imagesCount > 1 && (
@@ -237,21 +357,21 @@ export default function Rates({
 
                   {/* Card Content */}
                   <div className="room-card-content">
-                    <h3 className="room-card-title">{room.name}</h3>
-                    <p className="room-card-description">{room.description}</p>
+                    <h3 className="room-card-title" data-sanity="room.name">{room.name}</h3>
+                    <p className="room-card-description" data-sanity="room.description">{room.description}</p>
 
                     {/* Price & Guests */}
                     <div className="room-card-meta">
                       <div className="room-card-price">
-                        <span className="room-price-amount">{room.price}</span>
+                        <span className="room-price-amount" data-sanity="room.price">{room.price}</span>
                         <span className="room-price-period">/ night</span>
                       </div>
-                      <span className="room-card-guests">{room.guests}</span>
+                      <span className="room-card-guests" data-sanity="room.guests">{room.guests}</span>
                     </div>
 
                     {/* Inclusions */}
                     {room.inclusions && (
-                      <div className="room-inclusions">
+                      <div className="room-inclusions" data-sanity="room.inclusions">
                         {room.inclusions.map((item, i) => (
                           <div key={i} className="inclusion-item">
                             <span className="inclusion-icon">{item.icon}</span>

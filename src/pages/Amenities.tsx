@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react'
+import { client } from '../sanityClient'
 import './Amenities.css'
 
 interface AmenityData {
@@ -9,7 +11,19 @@ interface AmenityData {
   span?: 'wide' | 'tall' | 'featured' | 'normal'
 }
 
-const amenities: AmenityData[] = [
+type AmenitiesContent = {
+  eyebrow: string
+  title: string
+  subtitle: string
+}
+
+const fallbackAmenitiesContent: AmenitiesContent = {
+  eyebrow: 'INDULGE IN COMFORT',
+  title: 'Resort Amenities',
+  subtitle: 'Every detail designed for your perfect coastal escape',
+}
+
+const fallbackAmenities: AmenityData[] = [
   {
     id: 1,
     name: 'Resort Pool',
@@ -77,15 +91,72 @@ const amenities: AmenityData[] = [
 ]
 
 export default function Amenities() {
+  const [content, setContent] = useState<AmenitiesContent>(fallbackAmenitiesContent)
+  const [amenities, setAmenities] = useState<AmenityData[]>(fallbackAmenities)
+
+  useEffect(() => {
+    let isMounted = true
+
+    Promise.all([
+      client.fetch<Partial<AmenitiesContent> | null>(`
+        *[_type == "amenitiesSection"][0]{
+          eyebrow,
+          title,
+          subtitle
+        }
+      `),
+      client.fetch<Array<Omit<AmenityData, 'id' | 'icon' | 'span'> & { _id: string }>>(`
+        *[_type == "amenity"] | order(_createdAt asc){
+          _id,
+          name,
+          description,
+          "image": image.asset->url
+        }
+      `),
+    ])
+      .then(([sectionData, amenityData]) => {
+        if (!isMounted) return
+
+        if (sectionData) {
+          setContent({
+            ...fallbackAmenitiesContent,
+            ...sectionData,
+          })
+        }
+
+        if (amenityData.length) {
+          setAmenities(
+            amenityData.map((amenity, index) => ({
+              id: index + 1,
+              name: amenity.name,
+              description: amenity.description,
+              image: amenity.image || '',
+              icon: '',
+              span: fallbackAmenities[index]?.span || 'normal',
+            })),
+          )
+        }
+      })
+      .catch(() => {
+        if (!isMounted) return
+        setContent(fallbackAmenitiesContent)
+        setAmenities(fallbackAmenities)
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
   return (
     <section id="amenities" className="amenities-section" aria-label="Amenities">
      
 
       <div className="amenities-container">
         <div className="section-header reveal">
-          <span className="section-tag">INDULGE IN COMFORT</span>
-          <h2 className="section-title">Resort Amenities</h2>
-          <p className="section-subtitle">Every detail designed for your perfect coastal escape</p>
+          <span className="section-tag" data-sanity="amenitiesSection.eyebrow">{content.eyebrow}</span>
+          <h2 className="section-title" data-sanity="amenitiesSection.title">{content.title}</h2>
+          <p className="section-subtitle" data-sanity="amenitiesSection.subtitle">{content.subtitle}</p>
         </div>
 
         <div className="bento-grid">
@@ -102,6 +173,7 @@ export default function Amenities() {
                     alt={amenity.name}
                     className="bento-img"
                     loading="lazy"
+                    data-sanity="amenity.image"
                   />
                   <div className="bento-img-overlay" />
                 </>
@@ -112,8 +184,8 @@ export default function Amenities() {
               <div className="bento-content">
                 <span className="bento-icon" aria-hidden="true">{amenity.icon}</span>
                 <div>
-                  <h3 className="bento-name">{amenity.name}</h3>
-                  <p className="bento-desc">{amenity.description}</p>
+                  <h3 className="bento-name" data-sanity="amenity.name">{amenity.name}</h3>
+                  <p className="bento-desc" data-sanity="amenity.description">{amenity.description}</p>
                 </div>
               </div>
             </div>

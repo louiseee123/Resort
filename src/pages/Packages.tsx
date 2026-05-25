@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { client } from '../sanityClient';
 import './Packages.css';
 
 interface PackageData {
@@ -11,12 +12,24 @@ interface PackageData {
   includes?: string[]
 }
 
+type PackagesContent = {
+  eyebrow: string
+  title: string
+  subtitle: string
+}
+
+const fallbackPackagesContent: PackagesContent = {
+  eyebrow: 'CURATED EXPERIENCES',
+  title: 'Event Packages',
+  subtitle: 'Choose a package and let us handle every detail of your perfect celebration',
+}
+
 export default function Packages({
   onAskAboutThis,
 }: {
   onAskAboutThis: () => void
 }) {
-  const packages: PackageData[] = [
+  const fallbackPackages: PackageData[] = [
      {
       title: 'Phase 1 Area Package',
       description: 'Perfect for small gatherings and get togethers.',
@@ -95,6 +108,66 @@ export default function Packages({
       ],
     },
   ]
+  const [content, setContent] = useState<PackagesContent>(fallbackPackagesContent)
+  const [packages, setPackages] = useState<PackageData[]>(fallbackPackages)
+
+  useEffect(() => {
+    let isMounted = true
+
+    Promise.all([
+      client.fetch<Partial<PackagesContent> | null>(`
+        *[_type == "packagesSection"][0]{
+          eyebrow,
+          title,
+          subtitle
+        }
+      `),
+      client.fetch<PackageData[]>(`
+        *[_type == "packageItem"] | order(_createdAt asc){
+          title,
+          description,
+          price,
+          pax,
+          badge,
+          includes,
+          "images": images[].asset->url
+        }
+      `),
+    ])
+      .then(([sectionData, packageData]) => {
+        if (!isMounted) return
+
+        if (sectionData) {
+          setContent({
+            ...fallbackPackagesContent,
+            ...sectionData,
+          })
+        }
+
+        if (packageData.length) {
+          setPackages(
+            packageData.map((pkg, index) => {
+              const fallback = fallbackPackages[index % fallbackPackages.length]
+              return {
+                ...fallback,
+                ...pkg,
+                images: pkg.images?.length ? pkg.images : fallback.images,
+                includes: pkg.includes?.length ? pkg.includes : fallback.includes,
+              }
+            }),
+          )
+        }
+      })
+      .catch(() => {
+        if (!isMounted) return
+        setContent(fallbackPackagesContent)
+        setPackages(fallbackPackages)
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   // Carousel component for each package
   const ImageCarousel = ({ images, title }: { images: string[], title: string }) => {
@@ -184,7 +257,7 @@ export default function Packages({
           >
             {images.map((img, idx) => (
               <div key={idx} className="carousel-slide">
-                <img src={img} alt={`${title} - image ${idx + 1}`} loading="lazy" />
+                <img src={img} alt={`${title} - image ${idx + 1}`} loading="lazy" data-sanity="packageItem.images" />
               </div>
             ))}
           </div>
@@ -234,9 +307,9 @@ export default function Packages({
 
       <div className="packages-container">
         <div className="section-header reveal">
-          <span className="section-tag">CURATED EXPERIENCES</span>
-          <h2 className="section-title">Event Packages</h2>
-          <p className="section-subtitle">Choose a package and let us handle every detail of your perfect celebration</p>
+          <span className="section-tag" data-sanity="packagesSection.eyebrow">{content.eyebrow}</span>
+          <h2 className="section-title" data-sanity="packagesSection.title">{content.title}</h2>
+          <p className="section-subtitle" data-sanity="packagesSection.subtitle">{content.subtitle}</p>
         </div>
 
         <div className="packages-grid">
@@ -247,16 +320,16 @@ export default function Packages({
               style={{ animationDelay: `${index * 0.12}s` }}
             >
               <div className="package-card">
-                {pkg.badge && <span className="package-badge">{pkg.badge}</span>}
+                {pkg.badge && <span className="package-badge" data-sanity="packageItem.badge">{pkg.badge}</span>}
                 
                 <ImageCarousel images={pkg.images} title={pkg.title} />
                 
                 <div className="package-content">
-                  <h3 className="package-title">{pkg.title}</h3>
-                  <p className="package-description">{pkg.description}</p>
+                  <h3 className="package-title" data-sanity="packageItem.title">{pkg.title}</h3>
+                  <p className="package-description" data-sanity="packageItem.description">{pkg.description}</p>
                   
                   {pkg.includes && (
-                    <ul className="package-includes">
+                    <ul className="package-includes" data-sanity="packageItem.includes">
                       {pkg.includes.map((item, i) => (
                         <li key={i} className="package-include-item">
                           <svg className="include-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -271,9 +344,9 @@ export default function Packages({
                   <div className="package-meta">
                     <div className="package-price">
                       <span className="price-label">Package Rate</span>
-                      <span className="price-amount">{pkg.price}</span>
+                      <span className="price-amount" data-sanity="packageItem.price">{pkg.price}</span>
                     </div>
-                    <div className="package-pax">{pkg.pax}</div>
+                    <div className="package-pax" data-sanity="packageItem.pax">{pkg.pax}</div>
                   </div>
 
                   <button className="package-button" onClick={onAskAboutThis}>

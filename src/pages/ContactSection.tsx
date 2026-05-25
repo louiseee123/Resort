@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { client } from '../sanityClient'
 
 import './ContactSection.css'
 
@@ -17,6 +18,34 @@ type GeneralInquiry = {
   email: string
   message: string
 }
+
+type ContactContent = {
+  eyebrow: string
+  title: string
+  subtitle: string
+  formIntro: string
+  directPhone: string
+  directEmail: string
+  facebookPage: string
+}
+
+const fallbackContactContent: ContactContent = {
+  eyebrow: 'PACKAGE INQUIRY',
+  title: 'Tell Us About Your Event',
+  subtitle: 'Share the first few details and we will help shape the right package with you.',
+  formIntro: 'Share the basics and we will recommend the next step.',
+  directPhone: '0929 479 9835',
+  directEmail: 'balambanbooking@gmail.com',
+  facebookPage: 'facebook.com/villasusane.roomsnvenue',
+}
+
+const fallbackPackageOptions = [
+  'Phase 1 Area Package',
+  'Food Package with Pool Access',
+  'All-in-One Event Package',
+  'Grand Celebration Package',
+  'Not sure yet',
+]
 
 function formatDisplayDate(value: string) {
   if (!value) return 'Flexible / to be discussed'
@@ -69,6 +98,8 @@ export default function ContactSection({
   const [generalInquiry, setGeneralInquiry] = useState<GeneralInquiry>(initialGeneralInquiry)
   const [generalSending, setGeneralSending] = useState(false)
   const [generalMessage, setGeneralMessage] = useState('')
+  const [content, setContent] = useState<ContactContent>(fallbackContactContent)
+  const [packageOptions, setPackageOptions] = useState<string[]>(fallbackPackageOptions)
 
   // These props are currently reserved for future styling tweaks.
   void coralBtn
@@ -76,6 +107,51 @@ export default function ContactSection({
   void sectionHeading
   void sectionSubtitle
   void inputFieldStyle
+
+  useEffect(() => {
+    let isMounted = true
+
+    Promise.all([
+      client.fetch<Partial<ContactContent> | null>(`
+        *[_type == "contactSection"][0]{
+          eyebrow,
+          title,
+          subtitle,
+          formIntro,
+          directPhone,
+          directEmail,
+          facebookPage
+        }
+      `),
+      client.fetch<{ title: string }[]>(`
+        *[_type == "packageItem"] | order(_createdAt asc){
+          title
+        }
+      `),
+    ])
+      .then(([sectionData, packages]) => {
+        if (!isMounted) return
+
+        if (sectionData) {
+          setContent({
+            ...fallbackContactContent,
+            ...sectionData,
+          })
+        }
+
+        const titles = packages.map((item) => item.title).filter(Boolean)
+        if (titles.length) setPackageOptions([...titles, 'Not sure yet'])
+      })
+      .catch(() => {
+        if (!isMounted) return
+        setContent(fallbackContactContent)
+        setPackageOptions(fallbackPackageOptions)
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   const updateField = (field: keyof PackageInquiry, value: string) => {
     setFormData((current) => ({ ...current, [field]: value }))
@@ -166,9 +242,9 @@ export default function ContactSection({
     <section id="contact" className="contact-section" aria-label="Package inquiry">
       <div className="contact-container contact-container--split">
         <div className="section-header reveal">
-          <span className="section-tag">PACKAGE INQUIRY</span>
-          <h2 className="section-title">Tell Us About Your Event</h2>
-          <p className="section-subtitle">Share the first few details and we will help shape the right package with you.</p>
+          <span className="section-tag" data-sanity="contactSection.eyebrow">{content.eyebrow}</span>
+          <h2 className="section-title" data-sanity="contactSection.title">{content.title}</h2>
+          <p className="section-subtitle" data-sanity="contactSection.subtitle">{content.subtitle}</p>
         </div>
 
         <div className="split-layout">
@@ -202,7 +278,7 @@ export default function ContactSection({
                   </div>
                   <div className="contact-info-content">
                     <span className="contact-info-label">Phone / Viber</span>
-                    <strong className="contact-info-value">0929 479 9835</strong>
+                    <strong className="contact-info-value" data-sanity="contactSection.directPhone">{content.directPhone}</strong>
                   </div>
                 </div>
 
@@ -227,7 +303,7 @@ export default function ContactSection({
                   </div>
                   <div className="contact-info-content">
                     <span className="contact-info-label">Email</span>
-                    <strong className="contact-info-value">balambanbooking@gmail.com</strong>
+                    <strong className="contact-info-value" data-sanity="contactSection.directEmail">{content.directEmail}</strong>
                   </div>
                 </div>
 
@@ -247,7 +323,7 @@ export default function ContactSection({
                   </div>
                   <div className="contact-info-content">
                     <span className="contact-info-label">Facebook Page</span>
-                    <strong className="contact-info-value">facebook.com/villasusane.roomsnvenue</strong>
+                    <strong className="contact-info-value" data-sanity="contactSection.facebookPage">{content.facebookPage}</strong>
                   </div>
                 </div>
               </div>
@@ -311,7 +387,7 @@ export default function ContactSection({
             <div className="form-intro package-form-intro">
               <div>
                 <span className="form-intro-step">Event details</span>
-                <p>Share the basics and we will recommend the next step.</p>
+                <p data-sanity="contactSection.formIntro">{content.formIntro}</p>
               </div>
               <div className="package-form-pill">No commitment yet</div>
             </div>
@@ -329,15 +405,16 @@ export default function ContactSection({
                     value={formData.packageName}
                     onChange={(event) => updateField('packageName', event.target.value)}
                     required
+                    data-sanity="packageItem.title"
                   >
                     <option value="" disabled>
                       Select package
                     </option>
-                    <option value="Phase 1 Area Package">Phase 1 Area Package</option>
-                    <option value="Food Package with Pool Access">Food Package with Pool Access</option>
-                    <option value="All-in-One Event Package">All-in-One Event Package</option>
-                    <option value="Grand Celebration Package">Grand Celebration Package</option>
-                    <option value="Not sure yet">Not sure yet</option>
+                    {packageOptions.map((option) => (
+                      <option value={option} key={option}>
+                        {option}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -571,4 +648,3 @@ export default function ContactSection({
     </section>
   )
 }
-

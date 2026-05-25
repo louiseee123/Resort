@@ -1,31 +1,100 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { client } from '../sanityClient'
 import './HeroSection.css'
+
+type HeroContent = {
+  eyebrow: string
+  title: string
+  accentTitle: string
+  subtitle: string
+  backgroundImage: string
+  buttonText: string
+  features: string[]
+}
+
+const fallbackHero: HeroContent = {
+  eyebrow: 'WELCOME TO',
+  title: 'Villa Susane',
+  accentTitle: 'Events Place',
+  subtitle: 'Your private escape in Abucayan, Balamban, Cebu',
+  backgroundImage: '/bgnew.jpg',
+  buttonText: 'Discover More',
+  features: ['Private Pool', 'Function Hall', 'Event Ready'],
+}
 
 export default function HeroSection({ onLearnMore }: { onLearnMore: () => void }) {
   const heroRef = useRef<HTMLDivElement>(null)
+  const [scrolled, setScrolled] = useState(0)
+  const [content, setContent] = useState<HeroContent>(fallbackHero)
 
   useEffect(() => {
-    const handleParallax = () => {
-      if (heroRef.current) {
-        const scrolled = window.scrollY
-        heroRef.current.style.transform = `translateY(${scrolled * 0.5}px)`
-      }
+    let isMounted = true
+
+    client
+      .fetch<Partial<HeroContent> | null>(`
+        *[_type == "heroSection"][0]{
+          eyebrow,
+          title,
+          accentTitle,
+          subtitle,
+          buttonText,
+          features,
+          "backgroundImage": backgroundImage.asset->url
+        }
+      `)
+      .then((data) => {
+        if (!isMounted || !data) return
+        setContent({
+          ...fallbackHero,
+          ...data,
+          features: data.features?.length ? data.features : fallbackHero.features,
+          backgroundImage: data.backgroundImage || fallbackHero.backgroundImage,
+        })
+      })
+      .catch(() => {
+        if (isMounted) setContent(fallbackHero)
+      })
+
+    return () => {
+      isMounted = false
     }
-    window.addEventListener('scroll', handleParallax)
-    return () => window.removeEventListener('scroll', handleParallax)
   }, [])
 
+  useEffect(() => {
+    let ticking = false
+    
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setScrolled(window.scrollY)
+          ticking = false
+        })
+        ticking = true
+      }
+    }
+    
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const parallaxStyle = {
+    transform: `translateY(${scrolled * 0.35}px) scale(${1 + scrolled * 0.00015})`,
+    backgroundImage: `url(${content.backgroundImage})`,
+  }
+
   return (
-    <section
-      id="home"
-      className="hero-section"
-    >
+    <section id="home" className="hero-section">
       {/* Animated Gradient Background */}
       <div className="hero-bg-gradient" />
       
       {/* Background Image with Overlay */}
       <div className="hero-bg-wrapper">
-        <div className="hero-bg-image" ref={heroRef} />
+        <div 
+          className="hero-bg-image" 
+          ref={heroRef}
+          style={parallaxStyle}
+          data-sanity="heroSection.backgroundImage"
+        />
         <div className="hero-overlay" />
         <div className="hero-noise" />
       </div>
@@ -39,19 +108,15 @@ export default function HeroSection({ onLearnMore }: { onLearnMore: () => void }
 
       {/* Hero Content */}
       <div className="hero-content">
-        <div className="hero-badge">
-          
-        </div>
-
-        <p className="hero-label">
+        <p className="hero-label" data-sanity="heroSection.eyebrow">
           <span className="hero-label-line"></span>
-          WELCOME TO
+          {content.eyebrow}
           <span className="hero-label-line"></span>
         </p>
 
-        <h1 className="hero-title">
-          Villa Susane
-          <span className="hero-title-accent">Events Place</span>
+        <h1 className="hero-title" data-sanity="heroSection.title">
+          {content.title}
+          <span className="hero-title-accent" data-sanity="heroSection.accentTitle">{content.accentTitle}</span>
         </h1>
 
         <div className="hero-divider">
@@ -60,36 +125,21 @@ export default function HeroSection({ onLearnMore }: { onLearnMore: () => void }
           <div className="hero-divider-line" />
         </div>
 
-        <p className="hero-subtitle">
-          Your private escape in Abucayan, Balamban, Cebu
+        <p className="hero-subtitle" data-sanity="heroSection.subtitle">
+          {content.subtitle}
         </p>
 
-        <div className="hero-features">
-          <div className="hero-feature">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M12 2v4M12 18v4M4 12H2M6 12H4M20 12h-2M22 12h-2M19.07 4.93l-2.83 2.83M7.76 16.24l-2.83 2.83M16.24 16.24l2.83 2.83M7.76 7.76L4.93 4.93" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-              <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5"/>
-            </svg>
-            <span>Private Pool</span>
-          </div>
-          <div className="hero-feature">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M3 9l9-6 9 6v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M9 22V12h6v10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            <span>Function Hall</span>
-          </div>
-          <div className="hero-feature">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-              <path d="M12 2v4M12 22v-4M4 12H2M6 12H4M20 12h-2M22 12h-2M19.07 4.93l-2.83 2.83M7.76 16.24l-2.83 2.83M16.24 16.24l2.83 2.83M7.76 7.76L4.93 4.93" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-              <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5"/>
-            </svg>
-            <span>Event Ready</span>
-          </div>
+        <div className="hero-features" data-sanity="heroSection.features">
+          {content.features.map((feature) => (
+            <div className="hero-feature" key={feature}>
+              <span className="hero-feature-dot" />
+              <span>{feature}</span>
+            </div>
+          ))}
         </div>
 
         <button className="hero-btn" onClick={onLearnMore}>
-          <span>Discover More</span>
+          <span data-sanity="heroSection.buttonText">{content.buttonText}</span>
           <svg className="hero-btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
             <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
@@ -97,7 +147,12 @@ export default function HeroSection({ onLearnMore }: { onLearnMore: () => void }
       </div>
 
       {/* Scroll Indicator */}
-      
+      <div className="hero-scroll" aria-hidden="true">
+        <span className="hero-scroll-text">Scroll</span>
+        <div className="hero-scroll-line">
+          <span className="hero-scroll-dot" />
+        </div>
+      </div>
 
       {/* Bottom Gradient Fade */}
       <div className="hero-bottom-fade" />
