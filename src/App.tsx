@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { client } from './sanityClient'
 import './App.css'
 import HeroSection from './pages/HeroSection'
 import AdminReservations from './pages/AdminReservations'
@@ -104,6 +105,16 @@ const navLinks = [
   { label: 'Contact', href: '#contact' },
  
 ]
+
+type SiteSettings = {
+  title: string
+  navigation: typeof navLinks
+}
+
+const fallbackSiteSettings: SiteSettings = {
+  title: 'Villa Susane',
+  navigation: navLinks,
+}
 
 /* ----------------------------------------------------------
    Custom hook for scroll-triggered animations
@@ -373,7 +384,7 @@ function BookingModal({
             marginBottom: '0.5rem',
           }}
         >
-          Reserve {room.name}
+          Reserve <span data-sanity="room.name">{room.name}</span>
         </h3>
         <p
           style={{
@@ -558,8 +569,36 @@ export default function App() {
   const [modalOpen, setModalOpen] = useState(false)
   const [selectedRoom, setSelectedRoom] = useState<RoomData | null>(null)
   const [alert, setAlert] = useState<{ message: string; color: string } | null>(null)
+  const [siteSettings, setSiteSettings] = useState<SiteSettings>(fallbackSiteSettings)
 
   useScrollReveal()
+
+  useEffect(() => {
+    let isMounted = true
+
+    client
+      .fetch<Partial<SiteSettings> | null>(`
+        *[_type == "siteSettings"][0]{
+          title,
+          navigation[]{label, href}
+        }
+      `)
+      .then((data) => {
+        if (!isMounted || !data) return
+        setSiteSettings({
+          ...fallbackSiteSettings,
+          ...data,
+          navigation: data.navigation?.length ? data.navigation : fallbackSiteSettings.navigation,
+        })
+      })
+      .catch(() => {
+        if (isMounted) setSiteSettings(fallbackSiteSettings)
+      })
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -624,6 +663,8 @@ export default function App() {
     const el = document.querySelector(href)
     if (el) el.scrollIntoView({ behavior: 'smooth' })
   }
+
+  const visibleNavLinks = siteSettings.navigation.length ? siteSettings.navigation : navLinks
 
   /* Shared style objects — still used by sub-components via props */
   const coralBtn = {
@@ -732,6 +773,7 @@ export default function App() {
           <a
             href="#home"
             onClick={(e) => { e.preventDefault(); scrollToSection('#home') }}
+            data-sanity="siteSettings.title"
             style={{
               fontFamily: 'Poppins, sans-serif',
               fontWeight: 400,
@@ -740,12 +782,12 @@ export default function App() {
               letterSpacing: '-0.01em',
             }}
           >
-            Villa Susane
+            {siteSettings.title}
           </a>
 
           {/* Desktop Nav */}
-          <nav className="desktop-nav" style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-            {navLinks.map((link) => (
+          <nav className="desktop-nav" data-sanity="siteSettings.navigation" style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+            {visibleNavLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
@@ -782,8 +824,8 @@ export default function App() {
             backdropFilter: 'blur(12px)',
           }}
         >
-          <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
-            {navLinks.map((link) => (
+          <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.25rem' }} data-sanity="siteSettings.navigation">
+            {visibleNavLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}

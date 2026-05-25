@@ -1,290 +1,567 @@
 /* ============================================================
-   Find Us Section
-   Palette: #FDFCDC (cream) · #006D77 (teal) · #FF8360 (coral) · #2A9D8F (jade)
-   Typography: Poppins (headings) · Inter (body)
+   FIND US — Luxury Resort Location Section
    ============================================================ */
 
 .findus-section {
-  background: var(--section-peach-gradient, linear-gradient(180deg, #fff7f1 0%, #ffe9dc 100%));
-  padding: clamp(4rem, 8vw, 9rem) clamp(1.25rem, 5vw, 4rem);
   position: relative;
+  padding: clamp(5rem, 10vw, 8rem) clamp(1rem, 4vw, 3rem);
+  background: #F9F7F2;
   overflow: hidden;
+  isolation: isolate;
 }
 
-.findus-section::after {
-  content: '';
+/* ── Ambient Background Orbs ── */
+.findus-bg-orb {
   position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.12;
   pointer-events: none;
   z-index: 0;
 }
 
+.findus-bg-orb--top {
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, #FF8360 0%, transparent 70%);
+  top: -200px;
+  right: -150px;
+}
+
+.findus-bg-orb--bottom {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #006D77 0%, transparent 70%);
+  bottom: -200px;
+  left: -150px;
+}
+
 .findus-container {
-  max-width: 1180px;
+  max-width: 1200px;
   margin: 0 auto;
   position: relative;
   z-index: 1;
 }
 
-/* ── Top Rule ── */
-.findus-top-rule {
+/* ── Header ── */
+.findus-header {
+  text-align: center;
+  margin-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.findus-header-rule {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
-  margin-bottom: 4rem;
-  max-width: 1180px;
-  margin-left: auto;
-  margin-right: auto;
-  position: relative;
-  z-index: 1;
+  margin-bottom: 1.5rem;
 }
 
-.rule-line {
-  flex: 1;
+.findus-header-rule-line {
+  width: 40px;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--teal, #006D77));
+  background: linear-gradient(90deg, transparent, #FF8360, transparent);
 }
 
-.rule-line:last-child {
-  background: linear-gradient(90deg, var(--teal, #006D77), transparent);
+.findus-header-rule-diamond {
+  width: 8px;
+  height: 8px;
+  background: #FF8360;
+  transform: rotate(45deg);
+  opacity: 0.6;
 }
 
-.rule-diamond {
-  font-size: 0.6rem;
-  color: var(--coral, #FF8360);
-  letter-spacing: 0;
-}
-
-/* ── Section Header ── */
-.section-header {
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
-.section-tag {
+.findus-eyebrow {
+  display: block;
   font-family: 'Inter', sans-serif;
-  font-weight: 400;
-  font-size: 0.68rem;
+  font-weight: 500;
+  font-size: 0.7rem;
   text-transform: uppercase;
-  letter-spacing: 0.18em;
-  color: var(--coral, #FF8360);
-  margin-bottom: 0.6rem;
-  display: inline-block;
+  letter-spacing: 0.2em;
+  color: #FF8360;
+  margin-bottom: 0.75rem;
 }
 
-.section-title {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 300;
-  font-size: clamp(2.4rem, 5vw, 3.8rem);
-  color: var(--ink, #1A2B2C);
+.findus-title {
+  font-family: 'Cormorant Garamond', 'Playfair Display', 'Poppins', serif;
+  font-weight: 400;
+  font-size: clamp(2.5rem, 5vw, 3.75rem);
+  color: #1A2B2C;
+  line-height: 1.15;
   letter-spacing: -0.02em;
-  line-height: 1.05;
+  margin: 0 0 1rem;
 }
 
-/* ── Grid ── */
-.findus-grid {
+.findus-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  font-size: 1.05rem;
+  color: #6B7B7C;
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ── Content Grid ── */
+.findus-content {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-  align-items: center;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
 }
 
-/* ── Map ── */
-.findus-map-wrapper {
-  border-radius: 20px;
+@media (max-width: 900px) {
+  .findus-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+/* ── Map Column ── */
+.findus-map-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Map Frame */
+.findus-map-frame {
+  position: relative;
+  border-radius: 24px;
   overflow: hidden;
-  border: 1px solid var(--border, rgba(0, 109, 119, 0.12));
-  box-shadow: 0 4px 24px rgba(0, 109, 119, 0.06);
   aspect-ratio: 4 / 3;
-  background: #d4cbb5;
-  transition: box-shadow 0.4s ease, transform 0.4s ease;
-}
-
-.findus-map-wrapper:hover {
-  box-shadow: 0 16px 48px rgba(0, 109, 119, 0.12);
-  transform: translateY(-4px);
+  box-shadow: 
+    0 1px 2px rgba(0,0,0,0.04),
+    0 8px 32px rgba(0,109,119,0.08),
+    0 20px 60px rgba(0,109,119,0.04);
 }
 
 .findus-map-iframe {
   width: 100%;
   height: 100%;
   border: none;
+  filter: saturate(0.85) contrast(1.02);
 }
 
-/* ── Details ── */
-.findus-details {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+/* Map gradient overlays */
+.findus-map-gradient {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 80px;
+  pointer-events: none;
+  z-index: 2;
 }
 
-.findus-address {
-  margin-bottom: 0;
+.findus-map-gradient--top {
+  top: 0;
+  background: linear-gradient(180deg, rgba(249,247,242,0.6) 0%, transparent 100%);
 }
 
-.findus-address-line {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
+.findus-map-gradient--bottom {
+  bottom: 0;
+  background: linear-gradient(0deg, rgba(249,247,242,0.6) 0%, transparent 100%);
 }
 
-.findus-icon {
-  color: var(--teal, #006D77);
-  flex-shrink: 0;
-  margin-top: 0.2rem;
+/* Map corner accents */
+.findus-map-corner {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  z-index: 3;
+  pointer-events: none;
 }
 
-.findus-place {
-  font-family: 'Poppins', sans-serif;
-  font-weight: 500;
-  font-size: 1.25rem;
-  color: var(--teal, #006D77);
-  margin: 0 0 0.15rem;
-  line-height: 1.2;
+.findus-map-corner--tl { top: 12px; left: 12px; border-top: 1.5px solid rgba(255,255,255,0.4); border-left: 1.5px solid rgba(255,255,255,0.4); }
+.findus-map-corner--tr { top: 12px; right: 12px; border-top: 1.5px solid rgba(255,255,255,0.4); border-right: 1.5px solid rgba(255,255,255,0.4); }
+.findus-map-corner--bl { bottom: 12px; left: 12px; border-bottom: 1.5px solid rgba(255,255,255,0.4); border-left: 1.5px solid rgba(255,255,255,0.4); }
+.findus-map-corner--br { bottom: 12px; right: 12px; border-bottom: 1.5px solid rgba(255,255,255,0.4); border-right: 1.5px solid rgba(255,255,255,0.4); }
+
+/* ── Travel Time Cards ── */
+.findus-travel-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
-.findus-country {
-  font-family: 'Inter', sans-serif;
-  font-weight: 300;
-  font-size: 0.9rem;
-  color: var(--muted, #6B7B7C);
-  margin: 0;
+@media (max-width: 500px) {
+  .findus-travel-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-.findus-description {
-  font-family: 'Inter', sans-serif;
-  font-weight: 300;
-  font-size: 0.95rem;
-  color: var(--muted, #6B7B7C);
-  line-height: 1.8;
-  margin: 0;
+.findus-travel-card {
+  position: relative;
+  background: #FFFDF7;
+  border: 1px solid rgba(0,109,119,0.1);
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* ── Contact Links ── */
-.findus-contact {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.findus-contact-item {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  font-family: 'Inter', sans-serif;
-  font-weight: 400;
-  font-size: 0.9rem;
-  color: var(--muted, #6B7B7C);
-  text-decoration: none;
-  transition: color 0.3s ease;
-  width: fit-content;
-}
-
-.findus-contact-item svg {
-  color: var(--teal, #006D77);
-  flex-shrink: 0;
-}
-
-.findus-contact-item:hover {
-  color: var(--teal, #006D77);
-}
-
-/* ── Button ── */
-.findus-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: 60px;
-  background: transparent;
-  color: var(--teal, #006D77);
-  border: 1px solid var(--teal, #006D77);
-  font-family: 'Inter', sans-serif;
-  font-weight: 400;
-  font-size: 0.85rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  width: fit-content;
-}
-
-.findus-button:hover {
-  background: var(--teal, #006D77);
-  color: var(--cream, #FDFCDC);
-  border-color: var(--teal, #006D77);
-  box-shadow: 0 8px 24px rgba(0, 109, 119, 0.2);
+.findus-travel-card:hover {
+  border-color: rgba(0,109,119,0.2);
+  box-shadow: 0 8px 30px rgba(0,109,119,0.06);
   transform: translateY(-2px);
 }
 
-.findus-button:active {
-  transform: translateY(0);
+.findus-travel-card-inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  z-index: 1;
 }
 
-.findus-button svg {
-  transition: transform 0.3s ease;
+.findus-travel-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(0,109,119,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #006D77;
+  flex-shrink: 0;
 }
 
-.findus-button:hover svg {
-  transform: translateX(3px);
+.findus-travel-info {
+  display: flex;
+  flex-direction: column;
 }
 
-/* ── Reveal Animation ── */
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  animation: revealUp 0.75s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+.findus-travel-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6B7B7C;
 }
 
-@keyframes revealUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.findus-travel-time {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: #1A2B2C;
+  letter-spacing: -0.01em;
 }
 
-/* ── Responsive ── */
-@media (max-width: 767px) {
-  .findus-section {
-    padding: 3.5rem 1.25rem;
-  }
+/* Dot pattern decoration */
+.findus-travel-dot-pattern {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 80px;
+  height: 80px;
+  background-image: radial-gradient(rgba(0,109,119,0.06) 1.5px, transparent 1.5px);
+  background-size: 10px 10px;
+  pointer-events: none;
+}
 
-  .findus-top-rule {
-    margin-bottom: 2.5rem;
-  }
+/* ── Details Column ── */
+.findus-details-card {
+  background: #FFFDF7;
+  border: 1px solid rgba(0,109,119,0.08);
+  border-radius: 24px;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  box-shadow: 
+    0 1px 2px rgba(0,0,0,0.03),
+    0 8px 32px rgba(0,109,119,0.05);
+}
 
-  .findus-grid {
+/* Address Block */
+.findus-address-block {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.findus-address-icon-shell {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(255,131,96,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FF8360;
+  flex-shrink: 0;
+}
+
+.findus-address-label {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #FF8360;
+  margin-bottom: 0.35rem;
+}
+
+.findus-address-name {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 1.15rem;
+  color: #1A2B2C;
+  margin: 0 0 0.25rem;
+  letter-spacing: -0.01em;
+}
+
+.findus-address-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  color: #6B7B7C;
+  line-height: 1.6;
+  margin: 0 0 0.75rem;
+}
+
+.findus-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: 1px solid rgba(0,109,119,0.18);
+  border-radius: 10px;
+  padding: 0.45rem 0.9rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #006D77;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.findus-copy-btn:hover {
+  background: rgba(0,109,119,0.05);
+  border-color: #006D77;
+}
+
+.findus-copy-btn--copied {
+  background: rgba(42,157,143,0.1);
+  border-color: #2A9D8F;
+  color: #2A9D8F;
+}
+
+/* Ornamental Divider */
+.findus-ornament-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+}
+
+.findus-ornament-line {
+  width: 100%;
+  max-width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,109,119,0.12), transparent);
+}
+
+.findus-ornament-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(0,109,119,0.15);
+}
+
+.findus-ornament-diamond {
+  width: 6px;
+  height: 6px;
+  background: rgba(255,131,96,0.3);
+  transform: rotate(45deg);
+}
+
+/* Highlights */
+.findus-highlights-label {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6B7B7C;
+  margin-bottom: 0.75rem;
+}
+
+.findus-highlights-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+}
+
+@media (max-width: 500px) {
+  .findus-highlights-grid {
     grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-
-  .findus-map-wrapper {
-    aspect-ratio: 16 / 9;
-    order: 1;
-  }
-
-  .findus-details {
-    order: 2;
-    gap: 1.25rem;
-  }
-
-  .findus-place {
-    font-size: 1.15rem;
   }
 }
 
-@media (max-width: 480px) {
-  .section-title {
-    font-size: 2.1rem;
-  }
+.findus-highlight-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem;
+  color: #1A2B2C;
+}
 
-  .findus-map-wrapper {
-    border-radius: 16px;
-  }
+.findus-highlight-check {
+  color: #2A9D8F;
+  flex-shrink: 0;
+  display: flex;
+}
 
-  .findus-button {
-    width: 100%;
-    justify-content: center;
-  }
+/* Contact Block */
+.findus-contact-block {
+  /* spacing handled by parent gap */
+}
+
+.findus-contact-label-text {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #6B7B7C;
+  margin-bottom: 0.75rem;
+}
+
+.findus-contact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.findus-contact-link {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  border: 1px solid transparent;
+}
+
+.findus-contact-link:hover {
+  background: rgba(0,109,119,0.03);
+  border-color: rgba(0,109,119,0.08);
+}
+
+.findus-contact-link:hover .findus-contact-link-arrow {
+  opacity: 1;
+  transform: translate(2px, -2px);
+}
+
+.findus-contact-link-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(0,109,119,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #006D77;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+}
+
+.findus-contact-link:hover .findus-contact-link-icon {
+  background: rgba(0,109,119,0.1);
+}
+
+.findus-contact-link-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.findus-contact-link-text span {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1A2B2C;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.findus-contact-link-text small {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.72rem;
+  color: #6B7B7C;
+}
+
+.findus-contact-link-arrow {
+  opacity: 0;
+  color: #FF8360;
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Primary CTA */
+.findus-primary-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: #FF8360;
+  color: #FFFDF7;
+  border: none;
+  border-radius: 16px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+}
+
+.findus-primary-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.findus-primary-cta:hover {
+  background: #e67350;
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 32px rgba(255,131,96,0.25),
+    0 4px 12px rgba(255,131,96,0.15);
+}
+
+.findus-primary-cta:hover .findus-primary-cta-icon {
+  transform: translate(3px, -3px);
+}
+
+.findus-primary-cta-icon {
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+}
+
+/* ============================================================
+   Scroll Reveal Integration (works with your existing system)
+   ============================================================ */
+.findus-section .reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.findus-section .reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
 }

@@ -29,7 +29,7 @@
 }
 
 .contact-container--split {
-  max-width: 1200px;
+  max-width: 760px;
 }
 
 /* ── Section Headers ── */
@@ -72,9 +72,14 @@
 /* ── Split Layout (Form Right / Contact Info Left) ── */
 .split-layout {
   display: grid;
-  grid-template-columns: 1fr 1.2fr;
-  gap: 2rem;
+  grid-template-columns: minmax(0, 720px);
+  gap: 0;
+  justify-content: center;
   align-items: start;
+}
+
+.contact-left-column {
+  display: none;
 }
 
 /* Left Panel — Contact Info */
@@ -751,4 +756,3 @@
     font-size: 0.8rem;
   }
 }
-
