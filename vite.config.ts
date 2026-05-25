@@ -9,6 +9,14 @@ export default defineConfig({
   plugins: [inspectAttr(), react()],
   server: {
     port: 3000,
+    headers: {
+      'X-Frame-Options': 'ALLOWALL',
+    },
+  },
+  preview: {
+    headers: {
+      'X-Frame-Options': 'ALLOWALL',
+    },
   },
   resolve: {
     alias: {
